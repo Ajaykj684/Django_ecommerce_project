@@ -1,0 +1,83 @@
+
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+
+<h3 class="d-flex justify-content-center" >Product Offer</h3>
+<div class="d-flex justify-content-end mb-4">
+    <a href="{% url 'offer_management' %}" style="width:150px;"> <button type="button" class="btn btn-warning btn-block " style="width:100%;" >Back</button></a>
+     </div>
+ <div class="container">
+  <div class="row">
+    <div class="d-flex justify-content-between  ">
+    <div class="input-group mx-3 mb-3 mt-3" style="width:28%;">
+      <form class="input-group" action="{% url 'product_offer' %}" method="POST">
+      {% csrf_token %}
+      <input type="search" name="product_search" style="background:white; " class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit"  class="btn btn-outline-primary">search</button>
+      </form>
+    </div>
+    
+</div>
+    
+    <div class="col-12">
+      
+		<table class="table table-image">
+		  <thead>
+		    <tr>
+		      <th scope="col">No:</th>
+		      <th scope="col">Product image</th>
+		      <th scope="col">Product Name</th>
+		      <th scope="col">Description</th>
+		      <th scope="col">Price</th>
+		      <th scope="col" class="text-danger">offer(%)</th>
+
+		      <th scope="col">Category</th>
+		      <th scope="col">Edit offer</th>
+		      <th scope="col">Disable offer</th>
+
+
+		    </tr>
+		  </thead>
+		  <tbody>
+        {% for product in products %}
+		    <tr>
+		      <th scope="row">{{ forloop.counter }}</th>
+		      <td class="w-25">
+			      <img src="{{ product.image1.url }}" class="img-fluid img-thumbnail" style="width:160px; height:160px;" alt="image here">
+		      </td>
+		      <td>{{ product.product_name }}</td>
+		      <td class="text-muted">{{product.description}}</td>
+		      <td>{{product.price}}</td>
+          {% if product.product_offer > 0 %}
+		      <td class="text-danger">-{{product.product_offer}}%</td>
+          {% else %}
+		      <td class="text-success">No offer</td>
+          {% endif %}
+		      <td>{{product.category}}</td>
+		      <td> 
+
+            <a href="product_offer_edit/{{product.id}}"><button type="button" class="btn btn-primary btn-block mb-4">Edit</button></a>
+       </td>
+		      <td> <form action="product_offer_disable/{{product.id}}"method="POST">
+            {% csrf_token %}
+           {% if product.Is_offer_active ==  True %}
+              <button type="" class="btn btn-success btn-block mb-4">Disable</button>
+              {% else %}
+              <button type="" class="btn btn-danger btn-block mb-4">Disabled</button>
+
+              {% endif %}
+              </td>
+		    </tr>
+        {% endfor %}
+		   
+		  </tbody>
+		</table>   
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+  

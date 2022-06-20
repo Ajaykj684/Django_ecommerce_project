@@ -1,0 +1,445 @@
+
+{% load static %}
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'admin/img1/favicon.ico'%}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'admin/lib1/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'admin/lib1/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="{% static 'admin/css/style1.css'%}">
+    <link rel="stylesheet" href="{% static 'admin/css/bootstrap1.min.css'%}">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+		<link rel="stylesheet" href="{% static 'admin/admin_product_edit/style.css'%}">
+
+
+  </head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="{% url 'home_admin' %}" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"></i>Best Buy</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{ user.first_name }}</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'home_admin' %}" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Dashboard</a>
+                    <div class="nav-item ">
+                        <a href="{% url 'users_list' %}" class="nav-link " ><i class="fa fa-laptop me-2"></i>Users</a>
+                       
+                    </div>
+                    <a href="{% url 'category_list' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Category</a>
+                    <a href="{% url 'product_list'%}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Products</a>
+                    <a href="{% url 'coupon_list'%}" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
+                   
+                    <a href="{% url 'orders_list' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Orders</a>
+
+                    <a href="{% url 'sales_report' %}" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Sales report</a>
+                    <a href="{% url 'offer_management' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Offers</a>
+                    <a href="{% url 'banners' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Banner</a>
+
+                    <a href="{% url 'logout_admin' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Logout</a>
+
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                
+                <div class="navbar-nav align-items-center ms-auto">
+                  
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Notification</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            {% for message in messages %}
+                          <a href="#" class="dropdown-item">
+                              
+                                <h6 class="fw-normal mb-0">{{ message }}</h6>
+                                
+                            </a>     
+                            {% endfor %}                     
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">No notifications</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{ user.first_name }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="{% url 'offer_management' %}" class="dropdown-item">Offers</a>
+                            <a href="{% url 'logout_admin' %}" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        
+            <!-- Navbar End -->
+
+            <div class="m-3">
+              {% block content %}
+            <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-line fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Today Sales</p>
+                                <h6 class="mb-0">₹ &nbsp&nbsp{{revenue}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Total Orders</p>
+                                <h6 class="mb-0">{{order_count}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-area fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Today Revenue</p>
+                                <h6 class="mb-0">₹ &nbsp&nbsp{{revenue|sub:5075}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Active users</p>
+                                <h6 class="mb-0">12</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+
+
+            <!-- Sales Chart Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Total Sales</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            {% comment %} <canvas id="worldwde-sales"></canvas> {% endcomment %}
+<canvas id="myChart1" ></canvas>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Activities</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            
+                            {% comment %} <canvas id="worldwide-sales"></canvas>  {% endcomment %}
+                            <div class="d-flex mb-2">
+                                <form method="POST" action="{% url 'todo_list' %}">
+                                  {% csrf_token %}
+                                  <div class="d-flex">
+                                  <input class="form-control bg-transparent" placeholder="Enter task" name="todo">
+                                  <button type="submit" class="btn btn-primary ms-2">Add</button>
+                                  </div>
+                                </form>
+                              </div>
+                            {% for list in todo %}
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>{{ list.todo_list }}</span>
+                                        <a href="{% url 'todo_delete' list.id %}" class="btn btn-sm"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sales Chart End -->
+
+
+            <!-- Recent Sales Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Recent Sales</h6>
+                        <a href="{% url 'orders_list' %}">Show All</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                  <th scope="col"></th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Invoice</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for recent in recent_order %}
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>{{ recent.created_at }}</td>
+                                    <td>{{ recent.payment }}</td>
+                                    <td>{{ recent.first_name }} {{ recent.last_name }}</td>
+                                    <td>{{ recent.order_total }}0</td>
+                                    <td>{{ recent.status}}</td>
+                                    <td><a class="btn btn-sm btn-primary" href="{% url 'orders_list' %}">Detail</a></td>
+                                </tr>
+                               {% endfor %}
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Sales End -->
+
+
+            <!-- Widgets Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">Messages</h6>
+                                <a href="#">Show All</a>
+                            </div>
+                            {% for message in messages %}
+                            <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">Hey Admin..</h6>
+                                       
+                                    </div>
+                                    <span>{{ message }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="d-flex justify-content-center align-items-center" style="padding-top:130px;">
+                            <small> Important message comes here ..</small>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Calender</h6>
+                                <a href="#">Show All</a>
+                            </div>
+                            <div id="calender"></div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-sm-12 col-md-6 col-xl-4">
+                        <div class="h-100 bg-light rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">To Do List</h6>
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="d-flex mb-2">
+                              <form method="POST" action="{% url 'todo_list' %}">
+                                {% csrf_token %}
+                                <div class="d-flex">
+                                <input class="form-control bg-transparent"  placeholder="Enter task" name="todo">
+                                <button type="submit" class="btn btn-primary ms-2">Add</button>
+                                </div>
+                              </form>
+                            </div>
+
+                            {% for list in todo %}
+                            <div class="d-flex align-items-center border-bottom py-2">
+                                
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 align-items-center justify-content-between">
+                                        <span>{{ list.todo_list }}</span>
+                                        <a href="{% url 'todo_delete' list.id %}" class="btn btn-sm"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                          
+                        </div>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+            <!-- Widgets End -->
+
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                        </br>
+                        Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+        {% endblock %}
+      </div>
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+
+   
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+      const ctx = document.getElementById('myChart1').getContext('2d');
+      const myChart1 = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['Completed','Accepted','Pending','cancelled','returned'],
+              datasets: [{
+                  label: 'Order details',
+                  data: {{order_status_list}},
+                  backgroundColor: [
+                      'rgba(251, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(21, 26, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(193, 102, 255, 0.2)',
+                      'rgba(215, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+      </script>
+
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'admin/lib1/chart/chart.min.js' %}"></script>
+    <script src="{% static 'admin/lib1/easing/easing.min.js' %}"></script>
+    <script src="{% static 'admin/lib1/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'admin/lib1/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'admin/lib1/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'admin/lib1/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'admin/lib1/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    {% comment %} <script src="{% static '/path/to/jquery.js'%}"></script><!-- jQuery is required -->
+    <script src="{% static '/path/to/cropper.js'%}"></script><!-- Cropper.js is required -->
+    <link  href="{% static '/path/to/cropper.css'%}" rel="stylesheet">
+    <script src="{% static '/path/to/jquery-cropper.js'%}"></script> {% endcomment %}
+    <script src="{% static 'admin/js/popper.js'%}"></script>
+    <script src="{% static 'admin/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'admin/js/main.js'%}"></script>
+
+
+
+
+
+    <!-- Template Javascript -->
+    <script src="{% static 'admin/js1/main.js' %}"></script>
+</body>
+
+</html>

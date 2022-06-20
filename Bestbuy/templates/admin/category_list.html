@@ -1,0 +1,82 @@
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between">
+<div class="input-group m-3" style="width:28%">
+    <form class="input-group" action="{% url 'users_list' %}" method="POST">
+    {% csrf_token %}
+    <input type="search" name="user_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <button type="submit"  class="btn btn-outline-primary">search</button>
+
+    </form>
+  </div>
+  <div class=" m-3" >
+  <form method="POST" action="{% url 'category_add_page' %}">
+    {% csrf_token %}
+  <td><button type="submit"  class="btn btn-outline-success">Add Category</button></td>
+  </form>
+</div>
+</div>
+<div class="container">
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+        <th scope="col">Category name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Offer</th>
+        
+        <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in categories %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ category.category_name }}</td>
+        <td>{{ category.description }}</td>
+        {% if category.category_offer.discount > 0 %}
+        <td class="text-danger">{{ category.category_offer.discount }}%</td>
+        {% else %}
+        <td class="text-success">No Offer</td>
+
+        {% endif %}
+
+        
+        <form method="POST" action="category_delete/{{category.id}}">
+          {% csrf_token %}
+        <td>
+          <a   data-bs-toggle="modal" data-bs-target="#category-{{category.id}}">
+          <button type="submit"  class="btn btn-danger mt-2">Delete</button>
+          </a>
+        </td>
+        <div class="modal fade" id="category-{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Do you really want to Delete Category - <b>{{ category.category_name}}</b></p>
+              </div>
+              <div class="modal-footr d-flex justify-content-between p-3">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                
+                <a href="{% url 'category_delete' category.id %}"><button  class="btn btn-danger " style="background:dark-red;">Delete</button></a>
+              </div>
+            </div>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        </div>
+   
+        </form>
+        
+       
+      </tr>
+      {% endfor %%}
+  </tbody>
+</table>
+</div>
+
+{% endblock %}

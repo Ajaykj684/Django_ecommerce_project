@@ -1,0 +1,30 @@
+{% extends 'base.html'%}  
+  
+{% load static %}  
+
+{% block content%} 
+
+<div class="top" style="height:150px">!</div>
+<div class="d-flex justify-content-end  m-3">
+    <a href="{% url 'profile' %}" style="width:150px;"> <button type="button" class="btn_5 btn-primary btn-block" style="width:100%;" >Back</button></a>
+     </div>
+
+<div class="row d-flex align-items-center containerh">
+    
+{% for coupon in coupons %}
+
+    
+    <div class="carde text-center mx-5 m-4 mb-4">
+    <div>
+        <div class="image1e"><img src="https://i.imgur.com/DC94rZe.png" width="150"></div>
+        <div class="image2e"><img src="https://i.imgur.com/DC94rZe.png" width="150"></div>
+        <h1>{{ coupon.discount }}% OFF</h1><span class="d-block">On Everything</span><span class="d-block">Today</span>
+        <div class="mt-4"><small style="font-size:19px;">With Code :{{ coupon.coupon_code }}</small></div>
+    </div>
+</div>
+
+    {% endfor %}
+  
+</div>
+
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load mathfilters %}
+
+<div class="top" style="height:150px">!</div>
+<div class="colm p-5">
+
+<div class="row ">
+
+<main class="col-md-12 d-flex justify-content-center ">
+      
+<article class="card mb-4">
+<div class="card-body">
+<h4 class="card-title mb-4">Review cart</h4>
+{% comment %} {% for message in messages %}
+      <div class="alert alert-success" >
+       
+        {{message}}
+        
+       </div>
+
+{% endfor %} {% endcomment %}
+
+<div class="row">
+
+<table class="table">
+    <thead>
+      <tr>
+        
+        <th scope="col">Name</th>
+        
+        <th scope="col">Phone_number</th>
+        <th scope="col">email</th>
+        <th scope="col">Total_price</th>
+        <th scope="col">Order_id</th>
+        <th scope="col">ordered_date</th>
+        
+        <th scope="col">Order_status</th>
+        <th scope="col">View_order</th>
+
+        <th scope="col"></th>
+    
+      </tr>
+    </thead>
+    {% if not orders  %}
+    <th scope="col"></th>
+    <th scope="col"></th>    
+    <th scope="col"></th>
+
+<th class="text-muted" > You dont have any Orders.</th>
+   
+    <tbody>  
+
+{% else %}
+
+        {% for order in orders %}
+      <tr>
+        
+        <td>
+         
+            <div class="d-flex  mt-2">
+                <p>{{ order.first_name}}&nbsp{{order.last_name }}</p>
+            </div>
+          </td>
+       
+        <td>
+          <div class="d-flex  mt-2">
+             <p>{{order.phone_number }}</p> 
+          </div>
+      </td>
+      <td>
+        <div class="d-flex  mt-2">
+           <p>{{order.email }}</p> 
+        </div>
+    </td>
+        <td>
+            <div class="d-flex  mt-2">
+               <p>&nbsp {{order.order_total }}</p> 
+            </div>
+        </td>
+        <td>
+          <div class="d-flex  mt-2">
+             <p>{{order.order_number }}</p> 
+          </div>
+      </td>
+      <td>
+        <div class="d-flex  mt-2">
+           <p>{{order.created_at }}</p> 
+        </div>
+    </td>
+    <td>
+      <div class="d-flex  mt-2">
+         <p>{{order.status }}</p> 
+        
+      </div>
+  </td>
+  <td>
+    <div class="d-flex  mt-2">
+      <a href="{% url 'order_view' order.id %}"><button  class="btnn btn-primary " style="width:80px;">view order</button></a>
+
+    </div>
+</td>
+<td>
+  <div class="d-flex  mt-2">
+    {% if order.status == "cancelled" or  order.status == "Cancelled" %}
+    <button type="button"  class="btnn btn-warning"style="width:80px;">Cancelled</button>
+    {% elif order.status == "Completed" %}
+    
+                  <div class="d-flex justify-content-end">
+                  <a   data-bs-toggle="modal" data-bs-target="#order_return-{{product.id}}">
+                    <button type="submit"  class="btnn btn-success"style="width:80px;">Return</button>
+                    </a>
+                  </td>
+                  <div class="modal fade" id="order_return-{{product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                          <button type="button" class="btnn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Do you really want to return your delivered Product ?<br><b>  {{item.product.product_name}} </b></p>
+                        </div>
+                        <div class="modal-footr d-flex justify-content-between p-3">
+                          <button type="button" class="btnn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          
+                          <a href="{% url 'order_return' order.id %}"><button  class="btnn btn-danger " style="background:dark-red;"> confirm</button></a>
+                        </div>
+                      </div>
+                    </div>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+                  </div>
+                </div>
+                  
+                 </td>
+               </tr>
+               {% elif order.status == "Returned" %}
+               <button type="button"  class="btnn btn-warning"style="width:80px;">Returned</button>
+  
+              
+
+
+                
+    {% comment %} <button type="button"  class="btnn btn-success"style="width:80px;">Delivered</button> {% endcomment %}
+    {% elif order.status == "Returned" %}
+    <button type="button"  class="btnn btn-warning"style="width:80px;">Returned</button>
+
+
+    {% else %}
+
+    
+      <a   data-bs-toggle="modal" data-bs-target="#order_cancel-{{order.id}}">
+      <button type="submit"  class="btnn btn-danger"style="width:80px;">Cancel</button>
+      </a>
+    </td>
+    <div class="modal fade" id="order_cancel-{{order.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+            <button type="button" class="btnn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Do you really want to cancel your order ?</p>
+          </div>
+          <div class="modal-footr d-flex justify-content-between p-3">
+            <button type="button" class="btnn btn-secondary" data-bs-dismiss="modal">Close</button>
+            
+            <a href="{% url 'order_cancel' order.id %}"><button  class="btnn btn-danger " style="background:dark-red;"> confirm</button></a>
+          </div>
+        </div>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    </div>
+
+    {% endif %}
+    
+  </div>
+</td>
+        <td>
+            {% comment %} <div class="d-flex  mt-2">
+               <p> ₹ {{order.product.price|mul:order.quantity|floatformat:2}} </p> 
+            </div> {% endcomment %}
+        </td>
+        
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+{% endif %}
+  </table>
+
+</div> <!-- row.// -->
+</div> <!-- card-body.// -->
+</article> <!-- card.// -->
+</main>
+</div>
+</div>
+
+{% endblock %}

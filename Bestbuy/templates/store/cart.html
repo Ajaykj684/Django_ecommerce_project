@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block content %}
+{% load mathfilters %}
+<div class="top" style="height:130px">!</div>
+
+{% if not cart_items%}
+<div class="d-flex p-3 px-5">
+<div style="width:;"><img style="margin-left:auto;" src="{% static 'images/gif/addtocart.gif' %}" alt=""></div>
+
+<div class="one mt-5 mx-5">
+<h2>Your shopping cart is empty</h2>
+<br>
+<div class="text-center">
+   <a href="{% url 'store' %}" class="btn btn-primary pt-3 pb-3" style="border-radius:20px;">continue shopping</a>
+</div>
+</div>
+</div>
+
+{% else%}
+<div class="top" style="height:50px">!</div>
+<div class="container">
+   <div class="row">
+       <div class="col-xl-12">
+           
+               <h2>Shopping Cart</h2>
+           
+   </div>
+</div>
+<section class="cart_area p-1">
+   <div class="container">
+     <div class="cart_inner">
+       <div class="table-responsive">
+         
+                   
+         <table class="table">
+           <thead>
+             <tr>
+               <th scope="col">Product</th>
+               <th scope="col">Price</th>
+               <th scope="col">Size</th>
+
+               <th scope="col">Quantity</th>
+               <th scope="col">Remove</th>
+               <th scope="col">Total</th>
+             </tr>
+           </thead>
+          
+           <tbody>        
+               {% for item in cart_items%}
+             <tr>
+               <td>
+                 <div class="media ">
+                   <div class="d-flex">
+                     <img src="{{item.product.image1.url}}" style="width:120px; height:140px;"  alt="" />
+                   </div>
+                   <div class="media-body">
+                     <p>{{item.product.product_name}}</p>
+                   </div>
+                 </div>
+               </td>
+               <td>
+                
+                 <div class="d-flex align-items-center justify-content-center mt-2">
+                   {% if item.product.offer_perc > 0 %}
+                    <p>₹ &nbsp  {{item.product.offer_price}} <small><strike>{{item.product.price}}</strike></small></p>
+                  {% else %}
+                  <p>₹ &nbsp  {{item.product.price}}</p>
+                  {% endif %}
+                </div>
+                 
+                 <div class="d-flex align-items-center justify-content-center mt-2">
+                </div>
+               </td>
+               <td>
+
+                
+                 
+                <div class="d-flex align-items-center justify-content-center mt-2">
+                 
+                <h6 class="text-muted ml-2">{{item.size}}&nbsp&nbsp&nbsp&nbsp</h6>
+                 
+                </div>
+                
+             </div>      
+              
+               </td>
+               <td>
+                 <div class="product_count  d-flex product_data">
+                  {% if item.product.stock > 0 %}
+                     {% if item.quantity > 1 %}
+                   <a href="{% url 'delete_cart' item.id %}"><i class="fas fa-minus mt-3" style="color: brown;" ></i></a>
+                   {% endif %}
+                   <input type="text" class="d-flex justify-content-center mx-3 prod_id"value="{{item.quantity}}">
+                   {% csrf_token %}
+                   <a href="{% url 'add_cart' item.product.id %}" class="angeQuantity" ><i class="fas fa-plus mt-3" style="color: brown;"></i></a>
+                  {% else %}
+                  <div >
+                  <p style="color:red;">Out of Stock</p>
+                  
+                </div>
+                 </div>
+                 {% endif %}
+               </td>
+               <td>
+                <a   data-bs-toggle="modal" data-bs-target="#delete_cart_product-{{item.id}}">
+                  <button type="submit"  class="btnn btn-danger"style="width:80px;">Remove</button>
+                  </a>
+                </td>
+                <div class="modal fade" id="delete_cart_product-{{item.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                        <button type="button" class="btnn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Do you really want to remove <b>{{item.product.product_name}}</b> from your Cart ?</p>
+                      </div>
+                      <div class="modal-footr d-flex justify-content-between p-3">
+                        <button type="button" class="btnn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        
+                        <a href="{% url 'delete_cart_product' item.id %}"><button  class="btnn btn-danger " style="background:dark-red;"> confirm</button></a>
+                      </div>
+                    </div>
+                  </div>
+                  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+                </div>
+                <td>
+
+                
+                 
+                <div class="d-flex align-items-center justify-content-center mt-2">
+                  {% if item.product.offer_perc > 0 %}
+
+                    <h5>₹  {{ item.product.offer_price|mul:item.quantity|floatformat:2}}</h5><h6 class="text-muted ml-2"></h6>
+                  {% else %}
+                  <h5>₹  {{ item.product.price|mul:item.quantity|floatformat:2}}</h5><h6 class="text-muted ml-2"></h6>
+                  {% endif %}
+                </div>
+                
+             </div>      
+              
+               </td>
+             </tr>
+             {% endfor %}
+           </tbody>
+         </table>
+         
+         <div class="checkout_btn_inner float-right">
+          {% comment %} {% if count == 1  %} {% endcomment %}
+           <a class="btn_1 checkout_btn_1" href="{% url 'review_cart' %}">Proceed to checkout</a>
+          {% comment %} {% else %}
+          <a class="btn_1 checkout_btn_1" href="{% url 'cart' %}">remove the item</a>
+          {% endif %} {% endcomment %}
+         </div>
+       </div>
+     </div>
+ </section>
+</div>
+ {% endif %}
+
+ <script type="text/javascript">
+  alert("Hello! I am an alert box!!");
+  $(document).ready(function(){
+    alert("Hello! I am an alert box!!");
+      $('.changeQuantity').click (function(){
+          e.preventDefault();
+          
+          var product_id = $(this).closest('.product_data').find('.prod_id').val();
+          var product_qty = $(this).closest('.product_data').find('.quantity').val();
+          
+          var token = $('input[name=csrfmiddlewaretoken]').val();
+        data: {
+            'product_id':product_id,
+            'quantity': quantity,
+           
+        },
+      
+        })
+          $.ajax({
+              method: "POST",
+              url: '{% url "update_cart" %}',
+              data : data ,
+              success: function (response) {
+                      alertify.success(response.status)
+
+              }
+          })
+      });
+  
+</script>
+
+
+
+{% endblock %}

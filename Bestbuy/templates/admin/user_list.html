@@ -1,0 +1,98 @@
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+
+<div class="input-group m-3" style="width:28%">
+    <form class="input-group" action="{% url 'users_list' %}" method="POST">
+    {% csrf_token %}
+    <input type="search" name="user_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <button type="submit"  class="btn btn-outline-primary">search</button>
+    </form>
+  </div>
+  <div class="container">
+    <table class="table table-sm">
+      <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">email</th>
+        <th scope="col">Phone number</th>
+        <th scope="col">Is Admin</th>
+        <th scope="col">Is Active</th>
+        <th scope="col">Last login</th>
+        <th scope="col">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.Phone_number }}</td>
+        <td>{{ user.is_admin }}</td>
+        <td>{{user.is_active }}</td>
+        <td>{{ user.last_login }}</td>
+        <form method="POST" action="block_unblock/{{user.id}}">
+          {% csrf_token %}
+        {% if user.is_active %}
+        <td>
+          <a   data-bs-toggle="modal" data-bs-target="#user-{{user.id}}">
+          <button type="submit" class="btn btn-success btn-block mb-4 px-4 pl-3">Block</button>
+          </a></td>
+          <div class="modal fade" id="user-{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you really want to Block <b>{{user.first_name}}</b></p>
+                </div>
+                <div class="modal-footr d-flex justify-content-between p-3">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  
+                  <a href="{% url 'block_unblock' user.id %}"><button  class="btn btn-danger " style="background:dark-red;">Block</button></a>
+                </div>
+              </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+          </div>
+     
+        {% else %}
+        <td>
+          <a   data-bs-toggle="modal" data-bs-target="#user-{{user.id}}">
+          <button type="submit" class="btn btn-danger btn-block mb-4 px-3">Unblock</button></a></td>
+          <div class="modal fade" id="user-{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you really want to UnBlock <b>{{user.first_name}}</b></p>
+                </div>
+                <div class="modal-footr d-flex justify-content-between p-3">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  
+                  <a href="{% url 'block_unblock' user.id %}"><button  class="btn btn-success " style="background:dark-red;">Unblock</button></a>
+                </div>
+              </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+          </div>
+        {% endif %}
+        </form>
+      </tr>
+      {% endfor %%}
+     
+  
+    </tbody>
+  </table>
+
+{% endblock %}

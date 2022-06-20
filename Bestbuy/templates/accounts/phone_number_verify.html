@@ -1,0 +1,26 @@
+{% extends 'base.html'%}  
+{% block content%}      
+<div class="top" style="height:170px">!</div>
+<div class="container">
+{% for message in messages %}
+<div class="d-flex justify-content-center">
+<div class="text-white d-flex justify-content-center" style="background:orange; width:100%;"> 
+{{message}}
+</div>
+</div>
+{% endfor %}
+                            
+<form class="row contact_form" action="{% url 'phone_number_verification' %}?user_name={{user_name}}" method="POST">
+       {% csrf_token %}
+            <div class="col-md-12 form-group p_star d-flex justify-content-center mt-2" >
+                <input style="width:50%;" type="text" class="form-control" id="name" name="Phone_number" value=""
+                        placeholder="Enter mobile number">
+            </div>
+                          
+        <div class="col-md-12 form-group d-flex justify-content-center" >
+      <button type="submit" value="submit" class="btn_4"style="align-content: center; width:100px;">Submit</button>
+     </div>
+</form>
+</div>                  
+            
+     {% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="top" style="height:100px">!</div>
+
+<img src="{% static 'images/failed.png' %}" style="width:100%; height:100%;" />
+<div class="d-flex justify-content-center">
+<a class="btn btn-success position-absolute mt-4"style="width:10%;" href="{% url 'home' %}"><b>selected </b> <i class="fa fa-check" aria-hidden="true"></i>
+</a></div>
+{% endblock %}

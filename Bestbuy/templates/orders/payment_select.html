@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters%}
+{% block content %}
+<div class="top" style="height:200px">!</div>
+<section class="section-content padding-y bg">
+    <div class="container">
+      <div class="row d-flex">
+        <div class="card col-lg-8 ">
+            <p class="d-flex justify-content-center mt-3" style="font-size:20px; color:rgb(192, 2, 2);">Review your Order and choose payment</p>
+            <div class="card-body ">
+              <div class="container mb-5 mt-3">
+                <div class="row d-flex align-items-baseline">
+                  <div class="col-xl-9 mx-3">
+                    <p style="color: #7e8d9f;font-size: 20px;"><strong>Invoice</strong></p>
+                  </div> 
+                  {% for message in messages %}
+                  swal({{ message }}); 
+                  {% endfor %}
+                 
+                  <hr>
+                </div>
+          
+                  <div class="row">
+                    <div class="col-xl-8">
+                      <ul class="list-unstyled">
+                        <li class="text-muted">To: <span style="color:#5d9fc5 ;">{{ profile.profile.first_name }}</span></li>
+                        <li class="text-muted">{{profile.town}}</li>
+                        <li class="text-muted">{{profile.state}}, {{profile.country}}</li>
+                        <li class="text-muted"><i class="fas fa-phone"></i> {{profile.Phone_number}}</li>
+                        <li class="text-muted">zip: &nbsp {{profile.zip}}</li>
+
+                      </ul>
+                    </div>
+                    <div class="col-xl-4">
+                      <p class="text-muted">Invoice Details</p>
+                      <ul class="list-unstyled">
+                       
+                        <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                            class="fw-bold">Creation Date: Now</span></li>
+                        <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
+                            class="me-1 fw-bold">Status: &nbsp</span><span class="badge bg-warning text-black fw-bold">
+                            Unpaid</span></li>
+                      </ul>
+                    </div>
+                  </div>
+          
+                  <div class="row justify-content-center mt-5">
+                    <table class="table table-striped table-borderless">
+                      <thead style="background-color:#84B0CA ;" class="text-white">
+                        <tr>
+                          <th scope="col">No</th>
+                          <th scope="col">Description</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Size</th>
+                          <th scope="col">Unit Price</th>
+                          <th scope="col">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for item in cart_items %}
+                        <tr>
+                          
+                          <td>{{ forloop.counter }}</td>
+
+                          <td>{{item.product.description}}</td>
+                          <td>{{item.quantity}}</td>
+                          <td>{{item.size}}</td>
+
+                          <td>₹ {{item.product.offer_price}}</td>
+                          <td>₹{{ item.product.offer_price|mul:item.quantity}}</td>
+                        </tr>
+                       {% endfor %}
+                      </tbody>
+          
+                    </table>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-8">
+                      <p class=" mt-5">Add additional notes and payment information</p>
+          
+                    </div>
+                    <div class="col-xl-4 mt-5">
+                      <ul class="list-unstyled">
+                        <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>&nbsp ₹{{total|sub:40}}.00</li>
+                        <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Shipping</span>&nbsp ₹40</li>
+                      </ul>
+                      <p class="text-black float-start"><span class="text-black me-3 "> Total Amount</span><span
+                          style="font-size: 25px;" >&nbsp₹{{total}}</span></p>
+                    </div>
+                 
+                  <hr>
+                 
+          
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-12 mx-5">
+                <p>Thank you for your purchase</p>
+              </div>
+            </div>
+          </div> 
+    
+    
+    <!-- ============================ COMPONENT 2 ================================= -->
+      <div class="mt-5 ml-5">
+            
+            <aside class="col-md-12">
+           <div class="card ">
+            <div class="card-body">
+              <div>
+    <a href="{% url 'cash_on_delivery' val %}"><button class="btn btn_1  mb-2" style=" width:100%;">Cash on Delivery</button></a></div>
+<div>
+  <a href="/orders/payment/{{profile.id}}" ><button class="btn_1 btn-secondary btn-block align-items-center mb-2" style="height:10px; padding-bottom:25px;" type="submit">RAZOR PAY</button></a>
+
+               
+    <div class="" id="paypal-button-container"></div>
+
+
+
+                <hr>
+                <p class="text-center mb-3 ">
+                    <img  src="{% static 'images/misc/payments.png' %}" height="26">
+                </p>
+             
+            </div> <!-- card-body.// -->
+            </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+        <hr>
+        
+          </div>
+          
+        </div>
+   
+    <!-- ============================ COMPONENT 2 END//  ================================= -->
+   
+
+    <!-- ============================ PAYPAL//  ================================= -->
+<script src="https://www.paypal.com/sdk/js?client-id=AbZ1PMGV77_89-ap2iGwwQdK2pZ4R-A892kO9HUWd66KzB8sNJJSqTPRLqZIcMnbCa1S5SVlU9lTp1tl&currency=USD"></script>
+<div id="paypal-button-container"></div>
+            
+<script>
+function getCookie(name) {
+let cookieValue = null;
+if (document.cookie && document.cookie !== '') {
+const cookies = document.cookie.split(';');
+for (let i = 0; i < cookies.length; i++) {
+  const cookie = cookies[i].trim();
+  // Does this cookie string begin with the name we want?
+  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+      break;
+  }
+}
+}
+return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+var total = '{{ total }}'
+var url = '{% url 'place_order' %}'
+var orderID = '{{order_data.order_number}}'       
+var payment_method= 'Paypal'
+
+
+
+
+
+paypal.Buttons({
+
+// Sets up the transaction when a payment button is clicked
+createOrder: (data, actions) => {
+
+return actions.order.create({
+purchase_units: [{
+  amount: {
+    value: total   
+  }
+}]
+});
+},
+
+// Finalize the transaction after payer approval
+onApprove: (data, actions) => {
+return actions.order.capture().then(function(orderData) {
+
+console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+const transaction = orderData.purchase_units[0].payments.captures[0];
+
+// completeOrder()
+sendData();              
+function sendData(){
+  
+//send payment details to backend
+                            fetch(url, {
+                              method: 'POST',       
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken':csrftoken
+                              },
+                              body: JSON.stringify({
+                                orderID :orderID,
+                                transID: orderData.id,
+                                payment_method:payment_method,
+                                status:orderData.status,
+                                total:total,
+                              }),
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                              console.log('Success:', data);
+                              window.location.href = window.location.origin + '/orders/payment_successfull/'
+                              console.log(window.location)
+                            })
+                            .catch((error) => {
+                              console.error('Error:', error);
+
+                            }); 
+
+}
+
+});
+}
+}).render('#paypal-button-container');
+</script>
+
+
+{% endblock %}

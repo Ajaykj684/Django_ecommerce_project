@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters%}
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="top" style="height:200px">!</div>
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+    
+
+    <!-- ============================ COMPONENT 2 ================================= -->
+    <div class="row">
+            <main class="col-md-8">
+                {% comment %} {% for msg in messages%}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Hey</strong> {{msg}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  {% endfor%} {% endcomment %}
+
+<form action="{% url 'confirm_order' %}" method="POST">
+{% csrf_token %}
+        <h4 class="card-title mx-2 mb-4">Contact info</h4>
+               
+    <article class="card mb-4">
+        <div class="row gutters-sm">
+           
+           
+               
+            {% if profile_avl == 1 %}
+            <div class="col-sm-12 mb-3 ">
+              <div class="card  ">
+                <div class="container d-flex col-lg-4">
+
+                {% for profiles in profile %}
+                <div class="card-body  col-lg-3 ">
+                    <input type="radio" id="" name="address" selected checked value="{{ profiles.id }}">
+                  
+                  <h6 class="d-flex align-items-center mx-3 mb-3"><i class="material-icons text-info mr-2">Your</i>Address</h6>
+                
+                  <h5>{{ profiles.house }} </h5>
+                  <h6>{{ profiles.locality }} &nbsp {{ profiles.town }}</h6>
+                  
+                  <h6>{{ profiles.state }} &nbsp {{ profiles.country }}</h6>
+                  <h6></h6>
+                  <h6> zip : {{ profiles.zip }}</h6>
+                    
+                </div>
+              
+
+                {% endfor %}
+               </div>
+              </div>
+            </div>
+            {% endif %}
+        </div>
+
+    <div class="card-body">
+       
+        
+       <a href="{% url 'Add_address' %}" class="btn_3 checkout_btn_1 align-item-center">Add Address</a>
+        </div>
+          
+ 
+
+      
+            </main> <!-- col.// -->
+            <aside class="col-md-4">
+                <div class="card">
+            <div class="card-body">
+                <dl class="dlist-align mt-3">
+                  <dt>Total price:</dt>
+                  <dd class="text-right">₹ {{total}}.00</dd>
+                </dl>
+                <dl class="dlist-align">
+                  <dt>Shipping:</dt>
+                  <dd class="text-right">₹ 40</dd>
+                </dl>
+                <dl class="dlist-align">
+                  <dt>Total:</dt>
+                  <dd class="text-right text-dark b"><strong>₹ {{total}}.00</strong></dd>
+                </dl>
+                <hr>
+                <p class="text-center mb-3">
+                    <img src="{% static 'images/misc/payments.png' %}" height="26">
+                </p>
+                <div class="form-group col-sm-12">
+                    <button type="submit" class="bt p-1" style=" width:100%; background:red; border-radius:6px;">Confirm and pay</button>
+
+                </div>
+            
+            </div> <!-- card-body.// -->
+            </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+         </div> <!-- row.// -->
+    
+     
+            </div> <!-- card-body.// -->
+            </article> <!-- card.// -->
+
+
+    
+        </form>
+    </div> <!-- container .//  -->
+    </section>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+<div class="row">
+    <div class="form-group col-sm-6">
+       
+        {{ form.first_name|as_crispy_field }}
+    </div>
+    <div class="form-group col-sm-6">
+       
+        {{ form.last_name|as_crispy_field }}
+    </div>
+    <div class="form-group col-sm-6">
+       
+        {{ form.phone_number|as_crispy_field }}
+    </div>
+    <div class="form-group col-sm-6">
+     
+        {{ form.email|as_crispy_field}}
+    </div>
+</div> <!-- row.// -->	
+
+
+
+    <h4 class="card-title mb-4">Delivery info</h4>
+
+    <div class="row">
+        <div class="form-group col-sm-6">
+                    
+            {{ form.country|as_crispy_field }}
+        </div>
+
+
+        <div class="form-group col-sm-6">
+          
+            {{ form.state|as_crispy_field }}
+        </div>
+        
+        <div class="form-group col-sm-6">
+        
+            {{ form.town|as_crispy_field }}
+        </div>
+        <div class="form-group col-sm-6">
+                    
+            {{ form.city|as_crispy_field }}
+        </div>
+        <div class="form-group col-sm-6">
+        
+            {{ form.house|as_crispy_field }}
+        </div>
+
+        <div class="form-group col-sm-6">
+      
+            {{ form.zip|as_crispy_field }}
+        </div>
+</div> <!-- row.// -->	

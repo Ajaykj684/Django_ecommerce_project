@@ -1,0 +1,87 @@
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between">
+    
+      <div class=" m-3" >
+     
+      <td><a href="{% url 'coupon_add' %}"><button type="submit"  class="btn btn-outline-success">Add Coupon</button></a></td>
+     
+    </div>
+    </div>
+    <div class="container">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+         
+            <th scope="col">Coupon name</th>
+            <th scope="col">Percentage (%)</th>
+            <th scope="col">valid to</th>
+            
+            <th scope="col">Edit coupon</th>
+            <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for coupon in coupons %}
+          <tr>
+            <th scope="row">{{ coupon.coupon_code }}</th>
+            <td>{{ coupon.discount }}%</td>
+            <td>{{ coupon.valid_to }}</td>
+           
+            <td>
+              <a  href="{% url 'coupon_edit' coupon.id %}">
+              <button type="button"  class="btn btn-warning mt-2">Edit Coupon</button>
+              </a>
+            </td>
+            <td>
+                {% if coupon.active == True %}
+                <a  href="{% url 'coupon_disable' coupon.id %}">
+                <button type="button"  class="btn btn-primary mt-2">Disable</button>
+                </a>
+                {% else %}
+                <a  href="{% url 'coupon_disable' coupon.id %}">
+                    <button type="button"  class="btn btn-danger mt-2">Disabled</button>
+                    </a>
+                    {% endif %}
+              </td>
+            {% comment %} <form method="POST" action="category_delete/{{category.id}}">
+              {% csrf_token %}
+            <td>
+              <a   data-bs-toggle="modal" data-bs-target="#category-{{category.id}}">
+              <button type="submit"  class="btn btn-danger mt-2">Delete</button>
+              </a>
+            </td>
+            <div class="modal fade" id="category-{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Do you really want to Delete Category - <b>{{ category.category_name}}</b></p>
+                  </div>
+                  <div class="modal-footr d-flex justify-content-between p-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
+                    <a href="{% url 'category_delete' category.id %}"><button  class="btn btn-danger " style="background:dark-red;">Delete</button></a>
+                  </div>
+                </div>
+              </div>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+            </div>
+       
+            </form> {% endcomment %}
+            
+           
+          </tr>
+          {% endfor %%}
+      </tbody>
+    </table>
+    </div>
+    
+
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+<h3 class="d-flex justify-content-center mb-4 mt-3" >Orders</h3>
+
+
+
+<table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Name</th>
+        
+        <th scope="col">Email </th>
+        <th scope="col">Payment </th>
+        <th scope="col">Country </th>
+        <th scope="col">State</th>
+        <th scope="col">Town</th>
+        <th scope="col">Status</th>
+        <th scope="col">Is_Ordered</th>
+        <th scope="col">Created_date</th>
+        
+
+
+      </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+      <tr>
+          
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ order.first_name }} {{ order.last_name }}</td>
+        <td>{{ order.email }}</td>
+        <td>{{ order.payment }}</td>
+        <td>{{ order.country }}</td>
+        <td>{{ order.state }}</td>
+        <td>{{ order.town }}</td>
+        {% if order.status == "Cancelled" %}
+        <div class="" style="color:red;">
+        <td>{{ order.status }}</td>
+        </div>
+        {% else %}
+        <td>{{ order.status }}</td>
+
+        {% endif %}
+        <td>{{ order.is_ordered }}</td>
+        <td>{{ order.created_at }}</td>
+        <td> 
+         
+          <div class="btn-group dropleft">
+            
+              {% if  order.status == "New" %}
+              <button type="button" style="width:110px;" class="btn btn-danger dropdown-toggle mx-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                Status
+              </button>
+            <div class="dropdown-menu">
+            <a class="dropdown-item" href="admin_order_edit/{{order.id}}/New" value ="New">New</a>
+              <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Accepted" value="Accepted">Accepted</a>
+               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Completed" value ="Completed">Completed</a>
+               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Cancelled" value ="Cancelled">Cancelled</a>
+              {% elif order.status == "Accepted"   %}
+              <button type="button" style="width:110px;" class="btn btn-danger dropdown-toggle mx-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                Status
+              </button>
+            <div class="dropdown-menu"> 
+               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Completed" value ="Completed">Completed</a>
+               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Cancelled" value ="Cancelled">Cancelled</a>
+              {% elif order.status  == "Completed" %}
+              
+              <a class="s mx-4" href="#" value ="Completed"><button  type="button" style="width:110px;" class="btn btn-success btn-block mb-4">Completed</button></a>
+              {% elif order.status  == "Cancelled" or order.status  == "cancelled"  %}
+           
+              <a class="s mx-4" href="#" value ="Cancelled"><button  type="button" style="width:110px;" class="btn btn-warning btn-block mb-4">Cancelled</button></a>
+              {% elif order.status == "Returned"   %}
+              <a class="s mx-4" href="#" value ="Returned"><button  type="button" style="width:110px;" class="btn btn-warning btn-block mb-4">Returned</button></a>
+
+              
+              {% endif %}
+            </div>
+          </div>
+             </td>
+
+       
+
+       
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+{% endblock %}
+
+
+
+{% comment %} <td> 
+         
+  <a href="{% url 'admin_order_delete' order.id %}"><button  class="btn btn-danger " style="background:dark-red;">Delete</button></a>
+   </td> {% endcomment %}

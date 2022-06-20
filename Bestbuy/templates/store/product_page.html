@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="top" style="height:120px">!</div>
+<div class="container mt-5 mb-5">
+  	<div class="card">
+      	<div class="row g-0">	
+          <div class="col-md-6 ">	
+            <div class="d-flex flex-column justify-content-center">
+              <div class="d-flex">	
+              <div class="main_image img-magnifier-container">	
+                <img id = "myimage" src="{{ single_product.image1.url }}" width="350px;" height="400px;">	</div>	
+                <div class="mx-5" style="margin-right:100px;" >
+           <div id="myresult" class="img-zoom-result "  style="border:0px; width:230px; height:230px;"></div></div>
+              </div>  
+                  <div class="thumbnail_images mt-5 mb-5">
+                  	<ul id="thumbnail" class="d-flex ">	
+                      <li>
+                      <img class="mx-2" onclick="changeImage(this)" src="{{ single_product.image1.url }}" width="60px" height="70px;">
+                    </li>
+                    	<li>
+                        <img class="mx-2" onclick="changeImage(this)"  src="{{ single_product.image2.url }}" width="60px;" height="70px;">
+                      </li>
+                      <li>
+                        <img class="mx-2" onclick="changeImage(this)" src="{{ single_product.image3.url }}" width="60px;" height="70px;">
+                      </li>
+                     
+                      
+                    	</ul>	
+                      
+                    </div>	
+                  </div>
+                	</div>
+                  	<div class="col-md-6">	
+                      <div class="p-3 right-side mx-5">
+                        	<div class="d-flex justify-content-between align-items-center">	
+                            <h3>{{single_product.product_name}} </h3>	
+                            <span class="heart"><i class='bx bx-heart'></i></span>	
+                          </div>
+                          	<div class="mt-2 pr-3 content">	
+                              <p>{{single_product.description}}</p>	
+                            </div>
+                            {% if single_product.offer_perc > 0 %}
+                            <h5 style="color:red;">-{{ single_product.offer_perc}}%</h5>	<h4><small><strike class="text-muted">₹{{single_product.price}}</strike></small> &nbsp ₹{{single_product.offer_price}}</h4>	 
+                              {% else %}
+                            	<h3>₹{{single_product.price}}</h3>	
+
+                              {% endif %}
+                              <div class="ratings d-flex flex-row align-items-center">	
+                                <div class="d-flex flex-row">	<i class='bx bxs-star' ></i>	
+                                  <i class='bx bxs-star' ></i>	
+                                  <i class='bx bxs-star' ></i>
+                                  	<i class='bx bxs-star' ></i>	
+                                    <i class='bx bx-star' ></i>	
+                                  </div>	
+                                  <span>441 reviews</span>	
+                                </div>	
+                              
+                                <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
+                                  <span class="ti-truck"></span><span>free delivery</span>
+                                </div>
+                                  
+                                <form action="{% url 'buy_now' single_product.id %}" method="POST">
+                                  {% csrf_token %}
+                                                 
+                                  <div class="row">
+                                    <div class="item-option-select mt-4">
+                                      <h6>Select Size</h6>
+                                      <div class="card-body  col-lg-3 d-flex ">
+                                        <label class="bt btn-light mx-2">
+                                          <input type="radio" name="radio_size" value="S"/> S
+                                        </label>
+                                        <label class="bn tn-light mx-2">
+                                          <input type="radio" name="radio_size" value="M" selected checked/> M
+                                        </label>
+                                       
+                                        <label class="bn tn-light mx-2">
+                                          <input type="radio" name="radio_size" value="L" /> L
+                                        </label>
+                                        <label class="bn tn-light mx-2">
+                                          <input type="radio" name="radio_size" value="XL" /> XL
+                                        </label>
+                                      </div> 
+                                    </div>
+                                  </div> <!-- row.// -->
+                                  <hr>
+
+                                
+                                    <div class="buttons d-flex flex-row mt-5 gap-3">
+                                      {% if single_product.stock <= 0 %}
+        
+                                      <h5 class="text-danger">Out of Stock</h5>
+                                
+                                      {% else %}	
+                                      <button type="submit" class="bttn btn-success p-1">Buy Now</button>
+                                    </form>
+                                      <a href="{% url 'add_cart' single_product.id %}"><button class="bttn btn-danger p-1 mx-2">Add to Cart <i class="fas fa-shopping-cart"></i> </button></a>
+                                      {% endif %}
+					                          <a href="{% url 'add_wishlist' single_product.id %}" > <button class="product_favorite d-flex flex-column align-items-center justify-content-center p-1" style = " color:red;"></button></a>
+
+                                    	</div>	
+                              	</div>
+                          </div>	
+                    </div>
+            </div>	
+    </div> 
+</div>
+
+
+{% block scripts %}
+<script src="{% static 'styles/bootstrap4/zoom.js'%}"></script>
+<script>
+ imageZoom("myimage", "myresult");
+ </script>
+                                  
+ {% endblock scripts %}
+
+
+{% endblock %}
+
+

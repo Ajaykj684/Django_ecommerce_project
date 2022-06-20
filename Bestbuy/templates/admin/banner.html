@@ -1,0 +1,56 @@
+
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+<div class="row d-flex justify-content-end mx-5">
+<a href="{% url 'add_banner' %}" class="btn btn-success  mt-4 mb-3"style="width:10%;"><b>AddBanner </b> </a>
+</div>
+{% for img in bannr %}
+
+
+<div class="container">
+<div class="row justify-content-center" >
+    <div class="d-flex justify-content-end" style = "margin-right:110px;">
+        <td class=" position-absolute">
+          <a   data-bs-toggle="modal" data-bs-target="#banner-{{img.id}}">
+          <button type="submit"  class="btn btn-danger mt-2   position-absolute"><i class="bi bi-x "></i></button>
+          </a>
+        </td>
+        <div class="modal fade" id="banner-{{img.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Do you really want to Delete Banner </p>
+              </div>
+              <div class="modal-footr d-flex justify-content-between p-3">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                
+                <a href="{% url 'remove_banner' img.id %}"><button  class="btn btn-danger " style="background:dark-red;">Delete</button></a>
+              </div>
+            </div>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        </div>
+
+    </div>
+<img src="{{ img.banner_image.url }}" class="img-fluid" alt="Responsive image">
+    
+{% if img.is_selected == False %}
+<a href="{% url 'banner_select' img.id %}" class="btn btn-info position-absolute mt-4"style="width:10%;"><b>select</b></a>
+{% else %}
+<a class="btn btn-success position-absolute mt-4"style="width:10%;"><b>selected </b> <i class="fa fa-check" aria-hidden="true"></i>
+</a>
+
+{% endif %}
+</div>
+</div>
+
+<hr>
+{% endfor  %}
+
+
+{% endblock %}

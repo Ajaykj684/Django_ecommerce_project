@@ -1,0 +1,42 @@
+{% extends 'base.html'%}  
+{% block content%}      
+<div class="top" style="height:200px">!</div>
+      
+
+<div class="container height-100 d-flex justify-content-center align-items-center">
+     <div class="position-relative"> 
+         <div class="card p-2 text-center"> 
+             <h6>Please enter the one time password <br> to verify your number</h6>
+              <div> 
+                  <span>A code has been sent to</span> 
+                  <small>{{ phone_number }}</small> 
+                  {% for message in messages %}
+                  <div class="text-warning">
+                  {{ message }}
+                  </div>
+                  {% endfor %}
+                </div>
+                <form method="POST" action="{% url 'otp_verification' phone_number %}?name={{user_name}}">
+                    {% csrf_token %}
+                 <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2" style="width:600px;">
+                      <input class="m-1 text-center form-control rounded" style="width:40px;" type="text" name="first" id="first" maxlength="1" /> 
+                      <input class="m-1 text-center form-control rounded"  style="width:40px;" type="text" name="second" id="second" maxlength="1" /> 
+                      <input class="m-1 text-center form-control rounded"  style="width:40px;" type="text" name="third" id="third" maxlength="1" /> 
+                      <input class="m-1 text-center form-control rounded"  style="width:40px;" type="text" name="fourth" id="fourth" maxlength="1" /> 
+                    </div> 
+                    <div class="mt-4 mb-3"> 
+                        <button type = "submit" class="btn_5 btn-danger px-4 validate">Verify</button> 
+                    </div> 
+                </div> 
+            </form>
+                <div class="card-2"> 
+                    <div class="content d-flex justify-content-center align-items-center mt-3"> 
+                        <span >Didn't get the code ?</span> 
+                        <a href="#" class="text-decoration-none  text-primary">&nbsp Resend(1/3)</a> 
+                    </div>
+                </div>
+            </div>
+</div>
+
+{% endblock %}
+

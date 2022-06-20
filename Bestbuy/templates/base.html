@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<title>Best Buy</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Colo Shop Template">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="path/to/fontawesome.min.css">
+<link src="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="path/to/fontawesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css'%}">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/categories_responsive.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/categories_styles.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact_responsive.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/single_responsive.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/single_styles.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/storecard.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/style1.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/style.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/zoom.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/phone_otp.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/button.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/coupon.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/wallet.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/footer.css'%}">
+
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+{% block css %}
+
+{% endblock css %}
+
+
+
+
+
+
+</head>
+<header class="header trans_300">
+
+    <!-- Top Navigation -->
+
+    <div class="top_nav">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="top_nav_left">free shipping on all  India orders over ₹60</div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="top_nav_right">
+                        <ul class="top_nav_menu">
+
+                            <!-- Currency / Language / My Account -->
+
+                         
+                         
+                            {% if user.id is None %}
+                            <li class="account">
+                                <a href="#">
+                                    My Account
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="account_selection">
+                                   {% if request.session.session_key > 0 %}
+                                    <li><a href="{% url 'login' cart %}">Log In</a></li>
+                                    {% else %}
+                                    
+                                    <li><a href="{% url 'login'  %}">Log In</a></li>
+
+                                    {% endif %}
+                                    <li><a href="{% url 'register' %}">Register</a></li>
+                                 
+                                </ul>
+                                
+                            </li>
+                            {% else%}
+                            <small class="text-muted text-danger"> Welcome {{user.first_name}}</small>
+                            <li><a href="{% url 'logout' %}">logout</li>
+                            
+                            {% endif %}
+                         
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+
+    <div class="main_nav_container">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <div class="logo_container">
+                        <div style="background:black">
+                        <a href="{% url 'home' %}"><img src="{% static 'images/download.png'%}" style="width:80px;"></a>
+                    </div></div>
+                    <nav class="navbar">
+                        
+                        <ul class="navbar_menu">
+                            <li class="px-3"><a href="/">home</a></li>
+                            <li class="px-3"><a href="{% url 'store' %}">store</a></li>
+                            
+                            <li class="px-3"><a href="{% url 'wishlist' %}">wishlist</a></li>
+                            <li class="px-3"><a href="#">Contact</a></li>
+                            <li class="px-3"><a href="{% url 'my_orders' %}">My orders</a></li>
+                           
+                        </ul>
+                        <ul class="navbar_user">
+                            <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                            <li><a href="{% url 'profile' %}"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                            <li class="checkout">
+                                <a href="{% url 'cart' %}">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                <span id="checkout_items" class="checkout_items">{{ cart_count }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="hamburger_container">
+                            <i class="fa fa-bars" aria-hidden="true"></i>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+
+<body>
+    
+     
+    
+    {% block content %}
+
+
+    {% endblock %}
+
+	<!-- Footer -->
+    <div class="footer-dark mt-5">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">Fashion</a></li>
+                            <li><a href="#">Dress</a></li>
+                            <li><a href="#">watches</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>About</h3>
+                        <ul>
+                            <li><a href="#">Company</a></li>
+                            <li><a href="#">Team</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 item text">
+                        <h3>Best Buy</h3>
+                        <p>Bestbuy, India’s no. 1 online fashion destination justifies its fashion relevance by bringing something new and chic to the table on the daily. Fashion trends seem to change at lightning speed, yet the Myntra shopping app has managed to keep up without any hiccups.</p>
+                    </div>
+                    <div class="col item social"><a href="#"><i class="bi bi-twitter"></i></a><a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-instagram"></i></a><a href="#"><i class="bi bi-google"></i></a></div>
+                </div>
+                <p class="copyright">BestBuy © 2018</p>
+            </div>
+        </footer>
+    </div>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    {% block javascript %}
+
+    
+    {% endblock javascript %}
+
+
+<script src="{% static 'styles/bootstrap4/product_page.js'%}"></script>
+<script src="{% static 'styles/bootstrap4/phone_otp.js'%}"></script>
+<script src="{% static 'styles/bootstrap4/zoom.js'%}"></script>
+<script src="{% static 'js/jquery-3.2.1.min.js'%}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js'%}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js'%}"></script>
+<script src="{% static 'plugins/Isotope/isotope.pkgd.min.js'%}"></script>
+<script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js'%}"></script>
+<script src="{% static 'plugins/easing/easing.js'%}"></script>
+<script src="{% static 'js/custom.js'%}"></script>
+</body>
+
+</html>
+
+
+{% comment %} <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}

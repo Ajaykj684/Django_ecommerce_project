@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters%}
+{% block content %}
+<div class="top" style="height:200px">!</div>
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+    
+    
+    <!-- ============================ COMPONENT 2 ================================= -->
+    <div class="row">
+            <main class="col-md-8">
+    
+    <article class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title mb-4">Review cart</h4>
+        <div class="row">
+       
+       
+        <table class="table">
+            <thead >
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Price</th>
+                <th scope="col">Size</th>
+
+                <th scope="col">Quantity</th>
+                
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+           
+            <tbody>        
+                {% for cart_item in cart_items %}
+              <tr>
+                <td>
+                  <div class="media">
+                    <div class="d-flex">
+                      <img src="{{ cart_item.product.image1.url }}" style="width:120px; height:140px;"  alt="" />
+                    </div>
+                   
+                  </div>
+                </td>
+                <td>
+                 
+                    <div class="d-flex  mt-2">
+                        <p>{{ cart_item.product.product_name}}</p>
+                    </div>
+                  </td>
+                <td>
+                 
+                  <div class="d-flex  mt-2">
+                   {% if cart_item.product.offer_perc > 0 %}
+
+                   <p>₹ &nbsp  {{cart_item.product.offer_price}} <small><strike>{{cart_item.product.price}}</strike></small></p>
+                   {% else %}
+                   <p>₹ &nbsp  {{cart_item.product.price}}</p>
+                   {% endif %}
+                  </div>
+                </td>
+                <td>
+                 
+                  <div class="d-flex  mt-2">
+                      <p>{{ cart_item.size }}</p>
+                  </div>
+                </td>
+                <td>
+                    <div class="d-flex  mt-2">
+                       <p>x &nbsp {{cart_item.quantity }}</p> 
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex  mt-2">
+                  {% if cart_item.product.offer_perc > 0 %}
+
+                       <p> ₹ {{cart_item.product.offer_price|mul:cart_item.quantity|floatformat:2}} </p> 
+                  {% else %}
+                  <p> ₹ {{cart_item.product.offer_price|mul:cart_item.quantity|floatformat:2}} </p> 
+                  {% endif %}
+
+                    </div>
+                </td>
+                
+                
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+       
+        </div> <!-- row.// -->
+    </div> <!-- card-body.// -->
+    </article> <!-- card.// -->
+    
+
+
+      
+            </main> <!-- col.// -->
+            <aside class="col-md-4">
+                <div class="card">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                       <p>Your Wallet balance is : {{ wallet.balance }}0 &nbsp &nbsp &nbsp &nbsp &nbsp
+                      <a href="#" class="text-primary">Apply</a></p>
+                    </div>
+                </div>
+                
+            <div class="card-body">
+              {% for message in messages %}
+              {% if request.message is error %}
+              <div style="color:red">
+              {{ message }}</div>
+              {% else %}
+              <div style="color:green">
+                {{ message }}</div>
+                {% endif %}
+              {% endfor %}
+              
+                <dl class="dlist-align mt-3">
+                  <dt>Total :</dt>
+                  <dd class="text-right">₹ {{final_price}}.00</dd>
+                </dl>
+                <dl class="dlist-align">
+                  <dt>Shipping:</dt>
+                  <dd class="text-right">₹ 40</dd>
+                </dl>
+                {% if offer > 0 and  final_price > 1500 %}
+                <dl class="dlist-align">
+                  <dt>Coupon Applied:</dt>
+                  <dd class="text-right">{{offer}}%  off</dd>
+                </dl>
+                {% endif %}
+                <dl class="dlist-align">
+                  <dt>Final Amount :</dt>
+                  {% if offer > 0 and final_price > 1500 %}
+                  <dd class="text-right text-dark b"><strong>₹ {{final_price|mul:offer|div:100|sub:final_price|mul:-1|add:40 }}.00</strong></dd>
+                  <a href="" class="text-primary">Remove coupon ?</a>
+                  {% else %}
+                  <dd class="text-right text-dark b"><strong>₹ {{final_price|add:40}}.00</strong></dd>
+                  {% endif %}
+                </dl>
+                <hr>
+               
+                <div class="card mb-3">
+                  <div class="card-body">
+                      <form method="POST" action="{% url 'review_cart' %}">
+                        {% csrf_token %}
+                          <div class="form-group"> <label>Have coupon?</label>
+                              <div class="input-group"> 
+                                <input type="text" class="form-control coupon" name="coupon" placeholder="Coupon code">
+                                 <span class="input-group-append">
+                                    <button type="submit" class="bt1n btn-success btn-apply coupon px-3 pl-3 p-2" >Apply</button> 
+                                  </span> </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+                <hr>
+                <p class="text-center mb-3">
+                    <img src="{% static 'images/misc/payments.png' %}" height="26">
+                </p>
+                <a href="{% url 'confirm_order' %}?b={{offer}}" class="bt btn-block p-1 d-flex justify-content-center" style="background:red; border-radius:6px;">Place Order </a>
+                <a href="{% url 'store' %}"> <button type="button" class="bn btn-primary mt-3" style="width:100%; height:30px;  border-radius:6px;" >
+                     Continue Shopping 
+                  </button></a>
+                
+            </div> <!-- card-body.// -->
+            </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+    
+    <!-- ============================ COMPONENT 2 END//  ================================= -->
+    
+    
+    
+    
+    </div> <!-- container .//  -->
+    </section>
+
+{% endblock %}

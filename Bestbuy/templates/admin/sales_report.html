@@ -1,0 +1,99 @@
+
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center"><h2>Sales Report</h2></div>
+
+<form method="POST" action = "{% url 'show_result'  %}">
+  {% csrf_token %}
+From :&nbsp<input type='date' name="fromdate"/>&nbsp &nbsp &nbsp
+To :&nbsp<input type='date' name="todate"/>
+<input type="submit" value="Search"/>
+
+<hr>
+<div class="d-flex justify-content-between">
+  <div class="dropdown">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+    Monthly Report
+  </button>
+  <div class="dropdown-menu">
+      <a class="dropdown-item" href="{% url 'monthly_report' 1 %}">January</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 2 %}">February</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 3 %}">March</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 4 %}">April</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 5 %}">May</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 6  %}">June</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 7 %}">July</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 8 %}">August</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 9 %}">September</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 10 %}">October</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 11 %}">November</a>
+      <a class="dropdown-item" href="{% url 'monthly_report' 12 %}">December</a>
+  </div>
+</div> 
+
+  <div class="dropdown mx-3">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+    Yearly Report
+  </button>
+  <div class="dropdown-menu">
+    
+    <a class="dropdown-item" href="{% url 'yearly_report' 2022 %}">2022</a>
+    <a class="dropdown-item" href="{% url 'yearly_report' 2021 %}">2021</a>
+    <a class="dropdown-item" href="{% url 'yearly_report' 2020 %}">2020</a>
+    <a class="dropdown-item" href="{% url 'yearly_report' 2019 %}">2019</a>
+    <a class="dropdown-item" href="{% url 'yearly_report' 2018 %}">2018</a>
+    <a class="dropdown-item" href="{% url 'yearly_report' 2017 %}">2017</a>
+    <a class="dropdown-item" href="{% url 'yearly_report' 2016 %}">2016</a>
+    
+
+  </div>
+</div> 
+</div>
+</div>
+<hr>
+
+
+<div class="d-flex justify-content-end ">
+    <a href="{% url 'export_excel' %}" class="btn btn-primary mx-3">Export Excel</a>
+    <a href="{% url 'export_csv' %}"class="btn btn-secondary mx-3">Export CSV</a>
+    <a href="{% url 'export_pdf' %}"class="btn btn-dark mx-3 ">Export PDF</a>
+
+
+
+  </div>
+
+<table class="table table-bordered mt-3">
+    <tr>
+        <th scope="col">Total </th>
+        <th scope="col">₹ &nbsp 141637.50</th
+    </tr>
+</table>
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Date</th>
+        <th scope="col">Order No </th>
+        <th scope="col">Total Amount</th>
+       
+      </tr>
+    </thead>
+    <tbody>
+        {% for sales in salesreport %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ sales.created_at }}</td>
+
+        <td>{{ sales.order_number }}</td>
+        <td>{{ sales.order_total }}</td>
+       
+
+      </tr>
+      {% endfor %}
+     
+    </tbody>
+  </table>
+
+</form>
+{% endblock %}

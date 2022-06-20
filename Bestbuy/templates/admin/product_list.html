@@ -1,0 +1,198 @@
+
+{% extends 'admin/inddex.html' %}
+
+{% block content %}
+
+{% for message in messages %}
+<div class="alert alert-success" >
+ 
+  {{message}}
+  
+ </div>
+
+ {% endfor %}
+
+ <div class="container">
+  <div class="row">
+    <div class="d-flex justify-content-between  ">
+    <div class="input-group mx-3 mb-3 mt-3" style="width:60%;">
+      <form class="input-group" action="{% url 'product_list' %}" method="POST">
+      {% csrf_token %}
+      <input type="search" name="product_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+      <button type="submit"  class="btn btn-outline-primary">search</button>
+      </form>
+    </div>
+    <div class="add_button mb-4 mt-3" style="margin-left:600px; width:40%;">
+      <form action="product_add" method="POST">
+        {% csrf_token %}
+    <button type="submit" class="btn btn-success btn-block " >Add product</button>
+  </form>
+  </div>
+</div>
+    
+    <div class="col-12">
+      
+		<table class="table table-image">
+		  <thead>
+		    <tr>
+		      <th scope="col">No:</th>
+		      <th scope="col">Product image</th>
+		      <th scope="col">Product Name</th>
+		      <th scope="col">Description</th>
+		      <th scope="col">Price</th>
+		      <th scope="col" class="text-danger">offer(%)</th>
+
+		      <th scope="col">Stock</th>
+
+		      <th scope="col">Category</th>
+		      <th scope="col">Edit</th>
+		      <th scope="col">Delete</th>
+
+
+		    </tr>
+		  </thead>
+		  <tbody>
+        {% for product in products %}
+		    <tr>
+		      <th scope="row">{{ forloop.counter }}</th>
+		      <td class="w-25">
+			      <img src="{{ product.image1.url }}" class="img-fluid img-thumbnail" style="width:140px; height:160px;" alt="image here">
+		      </td>
+		      <td>{{ product.product_name }}</td>
+		      <td class="text-muted">{{product.description}}</td>
+		      <td>{{product.price}}</td>
+          {% if product.product_offer >= 0 %}
+		      <td class="text-danger">-{{product.offer_perc}}%</td>
+          {% else %}
+		      <td class="text-success">No offer</td>
+          {% endif %}
+          {% if product.stock > 0 %}
+		      <td >{{product.stock}}</td>
+          {% else %}
+          <td> <div style="color:red;">No_Stock </div></td>
+          {% endif %}
+		      <td>{{product.category}}</td>
+		      <td> 
+
+            <a href="product_edit/{{product.id}}"><button type="button" class="btn btn-primary btn-block mb-4">Edit</button></a>
+       </td>
+		      <td> <form action="product_delete/{{product.id}}"method="POST">
+            {% csrf_token %}
+      
+            <a   data-bs-toggle="modal" data-bs-target="#product-{{product.id}}">
+              <button type="" class="btn btn-danger btn-block mb-4">Delete</button>
+      
+            </a>
+            <div class="modal fade" id="product-{{product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Do you really want to delete {{product.product_name}}</p>
+                  </div>
+                  <div class="modal-footr d-flex justify-content-between p-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    
+                    <a href="{% url 'product_delete' product.id %}"><button  class="btn btn-danger " style="background:dark-red;">Confirm</button></a>
+                  </div>
+                </div>
+              </div>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+            </div>
+        </form></td>
+
+
+
+		    </tr>
+        {% endfor %}
+		   
+		  </tbody>
+		</table>   
+    </div>
+  </div>
+</div>
+{% comment %} <div class="container mx-auto mt-2">
+  <div class="input-group mt-5 mx-4 d-flex" style="width:28%">
+    <form class="input-group" action="{% url 'product_list' %}" method="POST">
+    {% csrf_token %}
+    <input type="search" name="product_search" style="background:grey" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <button type="submit"  class="btn btn-outline-primary">search</button>
+    </form>
+  </div>
+  <div class="d-flex justify-content-end">
+    <form action="product_add" method="POST">
+      {% csrf_token %}
+  <button type="submit" class="btn btn-success btn-block mb-4 " >Add product</button>
+</form>
+</div>
+  <div class="row d-flex ">
+    
+    {% for product in products %}
+    <div class="col-md-4 d-flex justify-content-center p-2">
+      <div class="card " style="width: 18rem;">
+  <img src="{{ product.images.url }}" class="card-img-top  mx-5" alt="..." style="width:50%;height:55%;">
+  <div class="card-body ">
+    <h5 class="card-title">{{ product.product_name }}</h5>
+        
+    <p class="card-text">{{product.description}}</p>
+    <div class="d-flex mx-5">
+
+   
+        <a href="product_edit/{{product.id}}"><button type="button" class="btn btn-primary btn-block mb-4">Edit</button></a>
+    
+    </div>
+    <form action="product_delete/{{product.id}}"method="POST">
+      {% csrf_token %}
+
+      <a   data-bs-toggle="modal" data-bs-target="#product-{{product.id}}">
+        <button type="" class="btn btn-danger btn-block mb-4">Delete</button>
+
+      </a>
+      <div class="modal fade" id="product-{{product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Do you really want to delete {{product.product_name}}</p>
+            </div>
+            <div class="modal-footr d-flex justify-content-between p-3">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              
+              <a href="{% url 'product_delete' product.id %}"><button  class="btn btn-danger " style="background:dark-red;">Confirm</button></a>
+            </div>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+      </div>
+  </form>
+</div>
+  </div>
+  </div>
+    </div>    
+{% endfor %}
+</div>
+  </div>
+
+
+ {% endcomment %}
+
+
+
+{% endblock %}
+  
+  
+  
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name}}</h5>
+      <p class="card-text">{{ product.description }}</p>
+      <img src="{{ product.image1.url }}"></img>
+    </div>
+  </div>

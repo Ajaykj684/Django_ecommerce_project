@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="top" style="height:200px">!</div>
+<section class="section-content padding-y">
+    <div class="container ">
+    
+    <div class="row d-flex">
+        <aside class="col-md-3 side-bar" >
+              
+            <div class="card">
+                <article class="filter-group">
+                    <header class="card-header">
+                        <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                            <i class="icon-control fa fa-chevron-down"></i>
+                            <h6 class="title">Categories</h6>
+                        </a>
+                    </header>
+                    <div class="filter-content collapse show" id="collapse_1" style="">
+                        <div class="card-body">
+                            
+                            <ul class="list-menu">
+                                <li><a style="color:black;" href="{% url 'store' %}">All Products</a></li>
+                            {% for category in links %}
+                            <li><a style="color:black;" href="{{ category.get_url}}">{{ category.category_name}}  </a></li>
+                            {% endfor %}
+                            </ul>
+    
+                        </div> <!-- card-body.// -->
+                    </div>
+                </article> <!-- filter-group  .// -->
+               <!-- filter-group .// -->
+                
+                <article class="filter-group">
+                    <header class="card-header">
+                        <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                            <i class="icon-control fa fa-chevron-down"></i>
+                            <h6 class="title">Price range </h6>
+                        </a>
+                    </header>
+                    <div class="filter-content collapse show" id="collapse_3" style="">
+                        <div class="card-body">
+                            
+                            <div class="form-row">
+                            <div class="form-group col-md-6">
+                            <label>Min</label>
+                            <!-- <input class="form-control" placeholder="$0" type="number"> -->
+                                <select class="mr-2 form-control">
+                                    <option value="0">₹0</option>
+                                    <option value="50">₹50</option>
+                                    <option value="100">₹100</option>
+                                    <option value="150">₹150</option>
+                                    <option value="200">₹200</option>
+                                    <option value="500">₹500</option>
+                                    <option value="1000">₹1000</option>
+                                </select>
+                            </div>
+                            <div class="form-group text-right col-md-6">
+                            <label>Max</label>
+                                <select class="mr-2 form-control">
+                                    <option value="50">₹50</option>
+                                    <option value="100">₹100</option>
+                                    <option value="150">₹150</option>
+                                    <option value="200">₹200</option>
+                                    <option value="500">₹500</option>
+                                    <option value="1000">₹1000</option>
+                                    <option value="2000">₹2000+</option>
+                                </select>
+                            </div>
+                            </div> <!-- form-row.// -->
+                            <button class="btn btn-block btn-primary pt-3 pb-3" style="border-radius:10px;">Apply</button>
+                        </div><!-- card-body.// -->
+                    </div>
+                </article> <!-- filter-group .// -->
+                
+            </div> <!-- card.// -->
+    
+        </aside> <!-- col.// -->
+        <main class="col-md-9">
+    
+    <header class="border-bottom mb-4 pb-3">
+        <div class="box d-flex justify-content-between">
+            <div class="form-inline">
+                <span class="mr-md-auto"><b>{{product_count}}</b>&nbspItems found </span>
+                
+            </div>
+            <div class="btn-group ">
+                <button class=" btn-sm btn-danger dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Category
+                </button>
+                <div class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'store' %}">All Products</a></li>
+                    {% for category in links %}
+                    <a class="dropdown-item" href="{{category.get_url}}">{{ category.category_name }}</a>
+                    {% endfor %}
+                </div>
+              </div> 
+            </div> 
+
+    </header><!-- sect-heading -->
+    
+    <div class="row">
+        {% for product in products %}
+
+        <div class=" product-item men col-lg-4 col-md-6 col-sm-12 col-12" style="width:25%; height:390px;">
+            <div class="product discount product_filter">
+               
+                    <a href="{% url 'add_wishlist' product.id %}"><i class='far fa-heart m-3 text-muted' style='font-size:20px; color:red'></i></a>
+                        
+                <div class="product_image d-flex justify-content-center">
+                    <a href="{{product.get_url}}">
+                    <img class=""src="{{ product.image1.url }}" style="height:200px;"></a>
+                </div>
+                {% if product.offer_perc > 0 %}
+                <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-{{ product.offer_perc }}%</span></div>
+                {% endif %}
+                <div class="product_info">
+                    <h6 class="product_name"><a href="{{ product.get_url}}">{{ product.product_name }}</a></h6>
+                    {% if product.offer_perc > 0 %}
+                    <div class="product_price">₹{{ product.offer_price }}<span>₹{{product.price}}</span></div>
+                    {% else %}
+                    <div class="product_price">₹{{ product.offer_price }}</div>
+
+                    {% endif %}
+
+                </div>
+            </div>  
+            <div class="asd d-flex justify-content-center">
+            <div class="red_button add_to_cart_button" >
+                {% if product.stock > 0 %}
+            <a href="{% url 'add_cart' product.id %}">ADD TO CART &nbsp <i class="fa fa-shopping-cart" style="font-size:14px" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div class="red_button add_to_cart_button mx-1 ml-1" style="background: rgb(7, 110, 42);">
+        <a href="{% url 'buy_now' product.id %}">BUY NOW &nbsp<i class='fa fa-shopping-bag' style="font-size:14px"></i>
+            </a> </div>
+                 {% else %} 
+                 <a href="#" class="red_button add_to_cart_button mx-5 btn-block btn-primary"> OUT OF STOCK </a>
+
+                 {% comment %} <a href="#" class="red_button btn-block btn-primary">out of stock </a> {% endcomment %}
+
+                    
+            {% endif %}
+        </div>
+            
+        </div>
+        {% endfor %}
+    
+    
+    </div> <!-- row end.// -->
+    
+    
+    <nav class="mt-4 d-flex " aria-label="Page navigation sample">
+      <ul class="pagination">
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+    
+    </main> <!-- col.// -->
+    
+    </div>
+    
+    </div> <!-- container .//  -->
+    </section>
+{% endblock %}

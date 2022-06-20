@@ -1,0 +1,59 @@
+/* body8{
+
+    background-color:#ff52529c;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+
+.card8{
+
+    width: 400px;
+    border:none;
+    height: 220px;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #f56262;
+}
+
+.percent{
+
+    font-size: 56px;
+    color: #fff;
+}
+
+.discount{
+
+    font-size: 27px;
+    color: #fff;
+}
+
+
+.line{
+
+    color: #fff;
+}
+
+
+
+.form-check-input:checked {
+    background-color: #F44336;
+    border-color: #F44336;
+}
+
+
+.form-check-input:focus {
+    border-color: #d50000;
+    outline: 0;
+    box-shadow: none;
+}
+
+
+.form-check {
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.75em;
+    margin-bottom: -5px;
+}
