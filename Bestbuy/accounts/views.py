@@ -262,6 +262,7 @@ def profile(request):
     if Profile.objects.filter(user = users).exists():
         profile = Profile.objects.filter(user = users)
         print("77777777")
+        print(profile)
         countt=0
         
         context = {

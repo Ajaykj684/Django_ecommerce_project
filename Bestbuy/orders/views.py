@@ -29,6 +29,36 @@ from django.db.models import Sum
 
 # Create your views here.
 
+def address(request):
+    user = request.user
+   
+    if request.method == "POST":
+      
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            Phone_number = request.POST['Phone_number']
+            
+            gender = request.POST['gender']
+            house = request.POST['house']
+            town = request.POST['town']
+            locality = request.POST['locality']
+            state = request.POST['state']
+            country = request.POST['country']
+            zip = request.POST['zip']
+            pro=Profile.objects.create(user=user,first_name=first_name,last_name=last_name,Phone_number=Phone_number,gender=gender,house=house,town=town,locality= locality,state=state,country=country,zip=zip)
+            pro.save()
+
+            profile = Profile.objects.filter(user = user)
+            
+            return redirect('confirm_order')
+
+         
+    else:
+        return render(request,'orders/address.html')
+
+
+
+
 def confirm_order(request):
     user = request.user
     total = 0

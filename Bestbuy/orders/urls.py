@@ -23,6 +23,9 @@ urlpatterns = [
     path('order_return/<int:id>/',views.order_return,name='order_return'),
     path('export_invoice_pdf',views.export_invoice_pdf,name='export_invoice_pdf'),
 
+    path('address',views.address,name='address'),
+
+
     
 
 

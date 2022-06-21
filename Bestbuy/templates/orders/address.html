@@ -73,7 +73,7 @@ body {
                     <h4 class="text-right">Add Address</h4>
                 </div>
                 
-        <form method="POST" action="{% url 'Add_address' %}">
+        <form method="POST" action="{% url 'address' %}">
             {% csrf_token %}
                 <div class="row mt-2">
                    
@@ -92,7 +92,7 @@ body {
                 <div class="row mt-3">
                     <div class="col-md-6"><label class="labels">Zip</label><input type="text" class="form-control" placeholder="Zip" name="zip" value ="{{ profiles.zip }}" required></div>
                 </div>
-                <div class="mt-5 text-center"><button class="btn_1 btn-primary profile-button" type="submit">Save Profile</button></div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save Profile</button></div>
             </div>
         </form>
     

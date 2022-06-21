@@ -464,19 +464,25 @@ def product_offer(request):
         search = request.POST["product_search"] 
         context = Product.objects.filter(product_name__icontains = search)
         return render(request,'admin/product_offer.html',{'products': context })
-    context= Product.objects.all()
+    context= Product.objects.all().order_by('product_name')
     return render( request,'admin/product_offer.html',{'products':context})
    
 
 def product_offer_disable(request,id):
     product_off = Product.objects.get(id=id)
+    print(product_off.Is_offer_active)
     print(product_off)
     if product_off.Is_offer_active == True:
         product_of = Product.objects.filter(id=id)
-        product = product_of.update(Is_offer_active = False)
+        print(product_of)
+        print("1")
+        product_of.update(Is_offer_active = False)
+        print(product_off.Is_offer_active)
     elif product_off.Is_offer_active == False:
+        print("2")
         product_of = Product.objects.filter(id=id)
-        product = product_of.update(Is_offer_active = True)
+        product_of.update(Is_offer_active = True)
+        print(product_of)
     return redirect('product_offer')
 
 

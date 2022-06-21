@@ -59,7 +59,8 @@
 
             <a href="product_offer_edit/{{product.id}}"><button type="button" class="btn btn-primary btn-block mb-4">Edit</button></a>
        </td>
-		      <td> <form action="product_offer_disable/{{product.id}}"method="POST">
+		      <td> 
+			<form action="{% url 'product_offer_disable' product.id %} " method="POST" >
             {% csrf_token %}
            {% if product.Is_offer_active ==  True %}
               <button type="" class="btn btn-success btn-block mb-4">Disable</button>
@@ -67,6 +68,7 @@
               <button type="" class="btn btn-danger btn-block mb-4">Disabled</button>
 
               {% endif %}
+			</form>
               </td>
 		    </tr>
         {% endfor %}
