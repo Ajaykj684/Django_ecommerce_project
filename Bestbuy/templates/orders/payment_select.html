@@ -82,11 +82,11 @@
                     </div>
                     <div class="col-xl-4 mt-5">
                       <ul class="list-unstyled">
-                        <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>&nbsp ₹{{total|sub:40}}.00</li>
+                        <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>&nbsp ₹{{total}}.00</li>
                         <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Shipping</span>&nbsp ₹40</li>
                       </ul>
                       <p class="text-black float-start"><span class="text-black me-3 "> Total Amount</span><span
-                          style="font-size: 25px;" >&nbsp₹{{total}}</span></p>
+                          style="font-size: 25px;" >&nbsp₹{{total|add:40}}</span></p>
                     </div>
                  
                   <hr>
@@ -109,9 +109,16 @@
             <aside class="col-md-12">
            <div class="card ">
             <div class="card-body">
-              <div>
-    <a href="{% url 'cash_on_delivery' val %}"><button class="btn btn_1  mb-2" style=" width:100%;">Cash on Delivery</button></a></div>
-<div>
+              <p>Your Wallet balance is : {{ wallet.balance }}0 &nbsp &nbsp<br>
+                {% if wallet.balance >= total|add:40 %}
+                
+              <a href="{% url 'wallet_payment' val %}" class="btn-4 text-primary d-flex justify-content-end mb-3">Apply</a></p>
+              {% else %}
+              <small style="font-size:10px;" class="d-flex justify-content-center">Your Wallet Balance is not Sufficient.</small>
+
+                {% endif %}
+                <div><a href="{% url 'cash_on_delivery' val %}"><button class="btn btn_1  mb-2" style=" width:100%;">Cash on Delivery</button></a></div>
+  <div>
   <a href="/orders/payment/{{profile.id}}" ><button class="btn_1 btn-secondary btn-block align-items-center mb-2" style="height:10px; padding-bottom:25px;" type="submit">RAZOR PAY</button></a>
 
                

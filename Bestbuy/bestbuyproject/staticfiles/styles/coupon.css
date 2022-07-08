@@ -1,0 +1,34 @@
+
+
+
+.carde {
+    width: 350px;
+    padding: 10px;
+    border-radius: 20px;
+    background: orange;
+    border: none;
+    color: #fff;
+    height: 350px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    
+  }
+  
+.containerh {
+    height: 100%;
+  }
+  
+  .image1e {
+    position: absolute;
+    opacity: .1;
+    left: 0;
+    top: 0;
+  }
+  
+  .image2e {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: .01;
+  }

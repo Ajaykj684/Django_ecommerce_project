@@ -1,4 +1,5 @@
 
+from math import prod
 from unicodedata import category
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -9,7 +10,7 @@ from store.models import Product
 from . models import Carts, CartItem,Coupon
 from django.contrib import auth,messages
 from django.db.models import Q
-
+import json
 # Create your views here.
 
 
@@ -24,11 +25,8 @@ def add_cart(request,product_id):
     product = Product.objects.get(id=product_id)
     current =request.session.session_key
     try:
-        print("yes")
         carts = Carts.objects.get(carts_id = _cart_id(request))
-        print(carts)
     except Carts.DoesNotExist:
-        print("no")
         if request.user.is_authenticated: 
             carts = Carts.objects.create(
                 
@@ -41,35 +39,8 @@ def add_cart(request,product_id):
                 
                 carts_id = _cart_id(request),
             )
-
-        print("no")
-        print(carts)
     carts.save()
-    print(carts)
-    print("carts")
-    print(carts.id)
-    
-    
 
-    # if Carts.objects.filter(user = request.user).exists():
-    #     c = Carts.objects.get(user = request.user , carts_id = current )
-    #     carrtt = Carts.objects.filter(user = request.user)
-    #     for cart in carrtt:
-    #         if cart != c:
-    #             if CartItem.objects.filter(cart = cart).exists():
-    #                 item =  CartItem.objects.filter(cart = cart)
-    #                 for itm in item:
-    #                     # new =CartItem.objects.filter(cart = cart)
-    #                     new =item.cart_id
-    #                 item.update(new = current )
-    #                 cart.delete()
-    #             else:
-    #                 pass
-    #         else:
-    #             pass
-    
-
-    print(cart, "666666655555")
     if request.user.is_authenticated: 
 
         try :
@@ -89,14 +60,9 @@ def add_cart(request,product_id):
             item.update(cart = carts.id)
             if Carts.objects.filter(carts_id = current, user= request.user).exists():
                 CC =Carts.objects.get(carts_id = current, user= request.user)
-                print(CC)
-                print("++++++++++++++++++++")
-                
-                
             
             if Carts.objects.filter( user= request.user  ).exclude(carts_id = current).exists():
                 CC = Carts.objects.filter( user= request.user  ).exclude(carts_id = current)
-                print("*********")
                 CC.delete()
             pass
 
@@ -107,7 +73,6 @@ def add_cart(request,product_id):
             
             cart_item.quantity += 1
             cart_item.save()
-            print("hello")
         except CartItem.DoesNotExist:
             cart_item = CartItem.objects.create(
                 product=product,
@@ -115,13 +80,11 @@ def add_cart(request,product_id):
                 cart = carts,
             )
             cart_item.save()
-            print("1")
         
 
     return redirect('cart')
 
 def update_cart(request):
-    print('im here')
     if request.method == 'POST':
         prod_id = int(request.POST.get('product_id'))
         if CartItem.objects.filter(user=request.user , product_id = prod_id ):
@@ -131,31 +94,44 @@ def update_cart(request):
             cart.save()
             return JsonResponse({ 'status': "Updated Successfully"})
 def cart(request):
+    
     if request.user.is_authenticated:
         
         cart_items = CartItem.objects.filter(user=request.user).order_by('product')
-        # cart_count = CartItem.objects.filter(user=request.user,is_active=True).count()
-        print(cart_items.count())
+        for cart in cart_items:
+            if cart.product.offer_perc > 0:
+                cart.total = cart.quantity * cart.product.offer_price
+                cart.save
+            else:
+                cart.total = cart.quantity * cart.product.price
+                cart.save
+        
         context = {
             'cart_items' : cart_items,
+            
+            
         }
+        
         return render(request,'store/cart.html',context)
     else : 
 
         try: 
             carts = Carts.objects.get(carts_id = _cart_id(request))
-            print(carts)
             
             carts.save()
 
             cart_items = CartItem.objects.filter( cart = carts)
-            print("haiii")
+            for cart in cart_items:
+                if cart.product.offer_perc > 0:
+                    cart.total = cart.quantity * cart.product.offer_price
+                else:
+                    cart.total = cart.quantity * cart.product.price
+
             context = {
                 'cart_items' : cart_items,
              }
             return render(request,'store/cart.html',context)
         except:
-            print("im here")
             pass
         return render(request,'store/cart.html')
  
@@ -204,7 +180,7 @@ def review_cart(request):
         for cart_item in cart_items :
             total = (cart_item.product.offer_price * cart_item.quantity)
             final_price = final_price + total
-        print(final_price)
+
         carrt.update(final_offer_price = final_price)
         if Wallet.objects.filter(user = request.user).exists():
             wallet = Wallet.objects.get(user = request.user)
@@ -224,9 +200,8 @@ def review_cart(request):
                 offer = coupon.discount
                 if final_price > 1500 : 
                     price = final_price - (final_price*offer / 100)
-                    print(final_price)
-                    cartitem = cart_offer.update(coupon_applied=offer, final_offer_price = price, user=user.email )
-                    print(offer)
+
+                    cart_offer.update(coupon_applied=offer, final_offer_price = price, user=user.email )
                 
                     messages.success(request,'Coupon Added Succesfully')
                 else: 
@@ -265,10 +240,8 @@ def review_cart(request):
         try:
             cart = Carts.objects.get(carts_id = _cart_id(request))
             
-            print(cart)
             return render(request,'accounts/login.html',{'cart':cart})
         except:
-            print("omg")
             
             return render(request,'accounts/login.html')
 
@@ -323,3 +296,62 @@ def wallet_apply(request):
         
          
 
+def update_add_cart(request):
+    body = json.loads(request.body)
+    product_id = body['product']
+    if request.user.is_authenticated:
+        user = request.user
+        cart = Carts.objects.get(user=user)
+    else:
+        cart = Carts.objects.get(carts_id = _cart_id(request))
+
+    cartitm = CartItem.objects.get(cart=cart , product_id = product_id)
+    prod = Product.objects.get(id = product_id)
+
+    print(prod.stock)
+    if cartitm.quantity < prod.stock:
+        cartitm.quantity += 1
+        if prod.offer_perc > 0:
+            cartitm.total = prod.offer_price * cartitm.quantity
+        else:
+            cartitm.total = prod.price * cartitm.quantity
+
+    else:
+        pass
+   
+    prodd = int(product_id) + 1213
+    
+    cartitm.save()
+    data = {"quantity":cartitm.quantity,"prod":product_id,"prodd":prodd, "total":cartitm.total}
+    return JsonResponse(data)
+   
+
+
+
+
+def update_sub_cart(request):
+    body = json.loads(request.body)
+    product_id = body['product']
+    if request.user.is_authenticated:
+        user = request.user
+        cart = Carts.objects.get(user=user)
+    else:
+        cart = Carts.objects.get(carts_id = _cart_id(request))
+
+    cartitm = CartItem.objects.get(cart=cart , product_id = product_id)
+    prod = Product.objects.get(id = product_id)
+
+
+    if cartitm.quantity > 1:
+        cartitm.quantity -= 1
+        if prod.offer_perc > 0:
+            cartitm.total = prod.offer_price * cartitm.quantity
+        else:
+            cartitm.total = prod.price * cartitm.quantity
+
+        cartitm.save()
+    
+    
+    
+    data = {"quantity":cartitm.quantity,"prod":product_id,  "total":cartitm.total}
+    return JsonResponse(data)

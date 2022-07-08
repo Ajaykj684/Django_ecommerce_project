@@ -3,8 +3,14 @@
 {% block content %}
 <h3 class="d-flex justify-content-center mb-4 mt-3" >Orders</h3>
 
-
-
+<div class="input-group mx-3 mb-3 mt-3" style="width:30%;">
+  <form class="input-group" action="{% url 'orders_list' %}" method="POST">
+  {% csrf_token %}
+  <input type="search" name="orders_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+  <button type="submit"  class="btn btn-outline-primary">search</button>
+  </form>
+</div>
+<div>
 <table class="table table-sm">
     <thead>
       <tr>
@@ -13,11 +19,13 @@
         
         <th scope="col">Email </th>
         <th scope="col">Payment </th>
-        <th scope="col">Country </th>
-        <th scope="col">State</th>
+        <th scope="col">House</th>
         <th scope="col">Town</th>
+        <th scope="col">State</th>
+        <th scope="col">Country </th>
+        
         <th scope="col">Status</th>
-        <th scope="col">Is_Ordered</th>
+        
         <th scope="col">Created_date</th>
         
 
@@ -31,43 +39,58 @@
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{ order.first_name }} {{ order.last_name }}</td>
         <td>{{ order.email }}</td>
-        <td>{{ order.payment }}</td>
-        <td>{{ order.country }}</td>
-        <td>{{ order.state }}</td>
+        <td>{{ order.payment.payment_method }}</td>
+        <td>{{ order.house }}</td>
         <td>{{ order.town }}</td>
+        
+        <td>{{ order.state }}</td>
+       <td>{{ order.country }}</td>
         {% if order.status == "Cancelled" %}
-        <div class="" style="color:red;">
+        <div  style="color:red;">
         <td>{{ order.status }}</td>
         </div>
         {% else %}
         <td>{{ order.status }}</td>
 
         {% endif %}
-        <td>{{ order.is_ordered }}</td>
+       
         <td>{{ order.created_at }}</td>
+        <td> <a href="{% url 'view_order' order.id %}" style="width:150px;"> <button type="button" class="btn btn-warning btn-block " style="width:100%;" >view</button></a>
+        </td>
         <td> 
          
           <div class="btn-group dropleft">
             
-              {% if  order.status == "New" %}
+              {% if  order.status == "Confirmed" %}
               <button type="button" style="width:110px;" class="btn btn-danger dropdown-toggle mx-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                 Status
               </button>
             <div class="dropdown-menu">
-            <a class="dropdown-item" href="admin_order_edit/{{order.id}}/New" value ="New">New</a>
-              <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Accepted" value="Accepted">Accepted</a>
-               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Completed" value ="Completed">Completed</a>
+              <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Shipped" value="Shipped">Shipped</a>
+              <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Out_for_delivery" value ="Out_for_delivery">Out_for_delivery</a>
+               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Delivered" value ="Delivered">Delivered</a>
                <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Cancelled" value ="Cancelled">Cancelled</a>
-              {% elif order.status == "Accepted"   %}
+               
+              {% elif order.status == "Shipped"   %}
               <button type="button" style="width:110px;" class="btn btn-danger dropdown-toggle mx-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                 Status
               </button>
-            <div class="dropdown-menu"> 
-               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Completed" value ="Completed">Completed</a>
+              <div class="dropdown-menu"> 
+              <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Out_for_delivery" value ="Out_for_delivery">Out_for_delivery</a>
+               <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Delivered" value ="Completed">Delivered</a>
                <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Cancelled" value ="Cancelled">Cancelled</a>
-              {% elif order.status  == "Completed" %}
+               
+               {% elif order.status == "Out_for_delivery"   %}
+               <button type="button" style="width:110px;" class="btn btn-danger dropdown-toggle mx-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                 Status
+               </button>
+             <div class="dropdown-menu"> 
+                <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Shipped" value="Shipped">Shipped</a>
+                <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Delivered" value ="Completed">Delivered</a>
+                <a class="dropdown-item" href="admin_order_edit/{{order.id}}/Cancelled" value ="Cancelled">Cancelled</a>
+              {% elif order.status  == "Delivered" %}
               
-              <a class="s mx-4" href="#" value ="Completed"><button  type="button" style="width:110px;" class="btn btn-success btn-block mb-4">Completed</button></a>
+              <a class="s mx-4" href="#" value ="Delivered"><button  type="button" style="width:110px;" class="btn btn-success btn-block mb-4">Delivered</button></a>
               {% elif order.status  == "Cancelled" or order.status  == "cancelled"  %}
            
               <a class="s mx-4" href="#" value ="Cancelled"><button  type="button" style="width:110px;" class="btn btn-warning btn-block mb-4">Cancelled</button></a>
@@ -89,11 +112,33 @@
   </table>
 
 
+
+      
+    
+{% if orders.has_other_pages %}
+<nav aria-label="Page navigation example"></nav>
+<ul class="pagination">
+  {% if orders.has_previous %}
+    <li class="page-item" ><a class="page-link" href="?page={{ orders.previous_page_number }}">&laquo;</a></li>
+  {% else %}
+    <li class="page-link disabled"> <span aria-hidden="true">&laquo;</span></li>
+  {% endif %}
+  {% for i in orders.paginator.page_range %}
+    {% if orders.number == i %}
+      <li class=" page-item page-link active"><span> {{ i }}</span> <span class=" page-linksr-only"></span></li>
+    {% else %}
+      <li class="page-item" ><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if orders.has_next %}
+    <li class="page-item" ><a class="page-link" href="?page={{ orders.next_page_number }}" >&raquo;</a></li>
+  {% else %}
+    <li class="page-item m-2 disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+</nav>
+
+{% endif %}
+</div>
+
 {% endblock %}
-
-
-
-{% comment %} <td> 
-         
-  <a href="{% url 'admin_order_delete' order.id %}"><button  class="btn btn-danger " style="background:dark-red;">Delete</button></a>
-   </td> {% endcomment %}

@@ -15,7 +15,7 @@
           <nav aria-label="breadcrumb" class="main-breadcrumb ">
             <ol class="breadcrumb d-flex justify-content-between">
              
-              <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+              
               {% if user.referel_activated == False %}
               <li>
                 <form method="POST" action = "{% url 'referel_add' %}">
@@ -29,7 +29,8 @@
               </form></li>
               {% endif %}
               <li>
-                <button type="button" class="btn_5 btn-success pl-3 px-3 p-1" data-toggle="modal" data-target=".bd-example-modal-sm">Your Wallet&nbsp &nbsp<i class="fa-solid fa-wallet"></i></button>
+              
+                <button type="button" class="btn_5 btn-success pl-3 px-3 p-1 mx-4 mt-1" data-toggle="modal" data-target=".bd-example-modal-sm">Your Wallet&nbsp &nbsp<i class="fa-solid fa-wallet"></i></button>
 
                     <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm ">
@@ -37,7 +38,7 @@
                       <div class="card8 ">
 
 
-                        <div class="text-center">
+                        <div class="text-center ">
             
                           <div class="d-flex flex-row text-center">
             
@@ -189,7 +190,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-                          <button type="button" class="btnn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          
                         </div>
                         <div class="modal-body">
                           <p>Do you really want to remove your Address ?</p>

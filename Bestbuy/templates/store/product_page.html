@@ -14,9 +14,11 @@
                 <img id = "myimage" src="{{ single_product.image1.url }}" width="350px;" height="400px;">	</div>	
                 <div class="mx-5" style="margin-right:100px;" >
            <div id="myresult" class="img-zoom-result "  style="border:0px; width:230px; height:230px;"></div></div>
-              </div>  
+              </div> 
+               
                   <div class="thumbnail_images mt-5 mb-5">
                   	<ul id="thumbnail" class="d-flex ">	
+                      {% if single_product.image2 and single_product.image3 %}
                       <li>
                       <img class="mx-2" onclick="changeImage(this)" src="{{ single_product.image1.url }}" width="60px" height="70px;">
                     </li>
@@ -26,7 +28,7 @@
                       <li>
                         <img class="mx-2" onclick="changeImage(this)" src="{{ single_product.image3.url }}" width="60px;" height="70px;">
                       </li>
-                     
+                     {% endif %}
                       
                     	</ul>	
                       
@@ -98,7 +100,7 @@
                                     </form>
                                       <a href="{% url 'add_cart' single_product.id %}"><button class="bttn btn-danger p-1 mx-2">Add to Cart <i class="fas fa-shopping-cart"></i> </button></a>
                                       {% endif %}
-					                          <a href="{% url 'add_wishlist' single_product.id %}" > <button class="product_favorite d-flex flex-column align-items-center justify-content-center p-1" style = " color:red;"></button></a>
+					                          <a href="{% url 'add_wishlist' single_product.id %}" > <button class="product_favorite d-flex flex-column align-items-center justify-content-center " style = " color:red;"></button></a>
 
                                     	</div>	
                               	</div>

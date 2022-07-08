@@ -3,55 +3,166 @@
 {% block content %}
 
 
-<div class="container contact-form">
-    <div class="d-flex justify-content-end">
-   <a href="{% url 'product_list' %}" style="width:150px;"> <button type="button" class="btn btn-primary btn-block " style="width:100%;" >Back</button></a>
-    </div>
-    <div class="contact-image">
-        <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
+<style>
 
-    </div>
-    <form method="POST" action="{{product.id}}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h3>edit your Product</h3>
-       <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input type="text" name="product_name" class="form-control"  value="{{product.product_name}}" />
+    /* The snackbar - position it at the bottom and in the middle of the screen */
+    #snackbar {
+      visibility: hidden; /* Hidden by default. Visible on click */
+      min-width: 250px; /* Set a default minimum width */
+      margin-left: -125px; /* Divide value of min-width by 2 */
+      background-color: #333; /* Black background color */
+      color: #fff; /* White text color */
+      text-align: center; /* Centered text */
+      border-radius: 2px; /* Rounded borders */
+      padding: 16px; /* Padding */
+      position: fixed; /* Sit on top of the screen */
+      z-index: 1; /* Add a z-index if needed */
+      left: 50%; /* Center the snackbar */
+      bottom: 30px; /* 30px from the bottom */
+    }
+    
+    /* Show the snackbar when clicking on a button (class added with JavaScript) */
+    #snackbar.show {
+      visibility: visible; /* Show the snackbar */
+      /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+      However, delay the fade out process for 2.5 seconds */
+      -webkit-animation: fadein 0.5s, fadeout 0.10s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    
+    /* Animations to fade the snackbar in and out */
+    @-webkit-keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+    }
+    
+    @keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+    }
+    
+    @-webkit-keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
+    }
+    
+    @keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
+    }
+
+
+</style>
+
+<div class="container-fluid pt-4 px-4 j">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  
+    <script>
+      {% for msg in messages %}
+      
+      swal('{{ msg }}', 'please try again', 'error');
+      {% endfor %}
+  </script>
+<!-- The actual snackbar -->
+<div id="snackbar" style="background:green;">Product Updated</div>
+
+
+
+     <center> <div class="col-md-12 col-xl-8">
+                <div class="bg-light rounded h-100 p-4">
+                    <form  action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        
+                    <div class=" mb-3">
+                        <input type="text" name="product_name" class="form-control" 
+                            placeholder="Product Name" value="{{product.product_name}}">  
+                    </div>
+
+
+                    <div class=" mb-3">
+                        <input type="number" name="price" class="form-control" 
+                            placeholder="Price"  value="{{product.price}}" >  
+                    </div>
+
+                    <div class=" mb-3">
+                        <input type="number" name="stock" class="form-control" 
+                            placeholder="Stock"  value="{{product.stock}}" >  
+                    </div>
+
+        
+                    <div class="from-control">  
+                       
+                           <input class="form-control"  type="text" , name="description", placeholder="Description"
+                           value="{{product.description}}">
+                       
+                    </div>
+
+                    
+                    <div class="mb-3 mt-3" style="display: flex; justify-content: left;">
+                        <label class="mx-2" >Category:</label>
+                        <select name="category" class="filter-selectbox">
+                        <option value="" selected>men</option>
+                        {% for cat in category %}
+                      <option value="{{cat.id}}">{{cat.category_name}}</option>
+                      
+                      {% endfor %}
+                    </select> 
+                    
                 </div>
-                <div class="form-group">
-                    <input type="text" name="description" class="form-control"  value="{{product.description}}" />
-                </div>
-                <div class="form-group">
-                    <input type="text" name="price" class="form-control"value="{{product.price}}" />
-                </div>
-                <div class="form-group">
-                    <input type="text" name="offer" class="form-control"value="{{product.product_offer}}" />
-                </div>
-                {% comment %} <div class="form-group">
-                    <input type="text" name="category" class="form-control"  value="" />
-                </div> {% endcomment %}
-                <div class="form-group">
-                    <input type="text" name="stock" class="form-control"value="{{product.stock}}" />
-                </div>
-                <div class="form-group">
-                    <input type="file" name="image1" accept="image/*;capture=camera" class="profile_picture_file_input" id="profile_picture_file_upload"/>
-                </div>
-                <div class="form-group">
-                    <input type="file" name="image2" accept="image/*;capture=camera" class="profile_picture_file_input" id="profile_picture_file_upload"/>
-                </div>
-                <div class="form-group">
-                    <input type="file" name="image3" accept="image/*;capture=camera" class="profile_picture_file_input" id="profile_picture_file_upload"/>
+
+                <div class="mb-3 pt-3" style="display: flex; justify-content: left;">
+                    <img class="mx-3" src="{{product.image1.url}}" height="70ch" alt="Image here">
+                    {% if product.image2 and product.image3 %}
+                    <img class="mx-3" src="{{product.image2.url}}"  height="70ch" alt="Image here">
+                    <img class="mx-3" src="{{product.image3.url}}" height="70ch" alt="Image here">
+
+                    
+                    {% endif %}
                 </div>
                 
-                <button  type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <textarea name="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
+                <div class="d-flex justify-content-left " style="display: flex;">
+
+                    <div class="mb-3 mx-2 pt-3" style="display: flex; justify-content: left;">
+                        <input type="file" class="form-control " name="image1"  id="imageInp">
+                        
+                    
+                    </div>
+                    <div class="mb-3 pt-3 mx-2" style="display: flex; justify-content: left; ">
+                        <input type="file" class="form-control"  style="position: static;"  name="image2"  id="imageInp2">
+                    </div>
+                    
+                    <div class="mb-3 pt-3" style="display: flex; justify-content: left;">
+                        <input type="file" class="form-control"   name="image3"  id="imageInp3">
+                    </div>
                 </div>
-            </div>
+                    
+               
+                    <button class="btn btn-primary my-4" onclick="myFunction()" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div></center>
+
+
+
         </div>
-    </form>
+
+    </div>
 </div>
+<script>
+
+    function myFunction() {
+        // Get the snackbar DIV
+        var x = document.getElementById("snackbar");
+      
+        // Add the "show" class to DIV
+        x.className = "show";
+      
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      }
+</script>
+
+
 {% endblock %}

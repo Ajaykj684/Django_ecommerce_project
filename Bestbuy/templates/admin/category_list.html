@@ -3,9 +3,9 @@
 {% block content %}
 <div class="d-flex justify-content-between">
 <div class="input-group m-3" style="width:28%">
-    <form class="input-group" action="{% url 'users_list' %}" method="POST">
+    <form class="input-group" action="{% url 'category_list' %}" method="POST">
     {% csrf_token %}
-    <input type="search" name="user_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <input type="search" name="category_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
     <button type="submit"  class="btn btn-outline-primary">search</button>
 
     </form>
@@ -17,7 +17,7 @@
   </form>
 </div>
 </div>
-<div class="container">
+<div class="container " style="overflow-x: scroll;">
 <table class="table table-sm">
   <thead>
     <tr>
@@ -55,7 +55,9 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
               <div class="modal-body">
                 <p>Do you really want to Delete Category - <b>{{ category.category_name}}</b></p>
@@ -77,6 +79,37 @@
       {% endfor %%}
   </tbody>
 </table>
+
+
+<div class="d-flex justify-content-center">
+  
+{% if categories.has_other_pages %}
+<nav aria-label="Page navigation example"></nav>
+<ul class="pagination">
+  {% if categories.has_previous %}
+    <li class="page-item" ><a class="page-link" href="?page={{ categories.previous_page_number }}">&laquo;</a></li>
+  {% else %}
+    <li class="page-link disabled"> <span aria-hidden="true">&laquo;</span></li>
+  {% endif %}
+  {% for i in categories.paginator.page_range %}
+    {% if categories.number == i %}
+      <li class=" page-item page-link active"><span> {{ i }}</span> <span class=" page-linksr-only"></span></li>
+    {% else %}
+      <li class="page-item" ><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if categories.has_next %}
+    <li class="page-item" ><a class="page-link" href="?page={{categories.next_page_number }}" >&raquo;</a></li>
+  {% else %}
+    <li class="page-item m-2 disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+</nav>
+
+{% endif %}
 </div>
+
+</div>
+
 
 {% endblock %}

@@ -15,14 +15,14 @@ def home(request):
         for product in products: 
             if product.category == cat.category and product.product_offer >=  0 and cat.discount >= 0 and cat.discount <= product.product_offer :
                 off =  product.product_offer 
-                if off <70 and off > 0 :
+                if off <= 70 and off >= 0 :
                     
                     product.offer_price = product.price-(product.price*off/100)
                     product.offer_perc = product.product_offer
                     product.save()
                 else: pass
             elif  product.category == cat.category and product.product_offer >= 0  and cat.discount >= 0  and cat.discount >= product.product_offer :
-                if cat.discount < 70 and cat.discount > 0 :
+                if cat.discount <= 70 and cat.discount >= 0 :
                     product.offer_price = product.price-(product.price*cat.discount/100)
 
                     product.offer_perc = cat.discount
@@ -62,26 +62,3 @@ def home(request):
 
 
 
-
-
-    # for cat in cat_offer:
-    #     for product in products: 
-    #         if product.category == cat.category and product.product_offer > 0 :
-    #             off = cat.discount + product.product_offer 
-    #             if off <100 and off > 0 :
-    #                 product.offer_price = product.price-(product.price*off/100)
-    #                 product.offer_perc = cat.discount
-    #                 product.save()
-    #             else: pass
-    #         elif product.category == cat.category and product.product_offer <= 0 :
-    #             if cat.discount < 100 and cat.discount > 0 :
-    #                 product.offer_price = product.price-(product.price*cat.discount/100)
-
-    #                 product.offer_perc = cat.discount
-    #                 product.save()
-    #         elif product.category != cat.category and product.product_offer > 0 :
-    #             if product.product_offer > 0 and product.product_offer < 100 :
-    #                 product.offer_price = product.price-(product.price*product.product_offer/100)
-    #                 product.save()
-    #         else:
-    #             pass

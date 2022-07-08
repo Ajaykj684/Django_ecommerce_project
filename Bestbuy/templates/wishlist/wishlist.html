@@ -5,15 +5,16 @@
 <div class="top" style="height:200px">!</div>
 
 {% if not wishlistitem  %}
-<div class="d-flex p-3 px-5">
-<div style="width:;"><img style="margin-left:auto;" src="{% static 'images/gif/wishlist.gif' %}" alt=""></div>
-
-<div class="one mt-5 mx-5">
+<div class="d-flex p-3 px-5 row " >
+<div class="col-sm-12 col-md-6 col-lg-6"><img style="margin-left;" class="img-fluid"  src="{% static 'images/gif/wishlist.gif' %}" alt="">
+</div>
+<div class="col-12 d-flex justify-content-center col-sm-12 col-md-6 col-lg-6">
+<div class="one mt-5 ">
 <h2>Your Wishlist is empty</h2>
 <br>
 <div class="text-center">
    <a href="{% url 'store' %}" class="btn btn-primary pt-3 pb-3" style="border-radius:20px;">continue shopping</a>
-</div>
+</div></div>
 </div>
 </div>
 
@@ -26,7 +27,7 @@
 
     {% for product in wishlistitem %}
 
-    <div class=" col-lg-4 product-item men " style="width:25%; height:390px;">
+    <div class="row product-item men col-12 col-md-4 mx-1" >
 
 
         <div class="product discount product_filter">
@@ -77,20 +78,22 @@
 
             {% endif %}
             </div>
-        </div>  
+      
+        
          {% if product.product.stock > 0 %}
-                <a href="{% url 'add_cart' product.product.id %}" class="red_button add_to_cart_button mx-5 btn-block btn-primary pt-2">Add to cart </a>
-             {% else %} 
+        
+                <a href="{% url 'add_cart' product.product.id %}" class="red_button add_to_cart_button mx-5 btn-block btn-primary pt-2 ">Add to cart </a>
+         
+                {% else %} 
              <a href="#" class="red_button add_to_cart_button mx-5 btn-block btn-primary"> OUT OF STOCK </a>
 
-             {% comment %} <a href="#" class="red_button btn-block btn-primary">out of stock </a> {% endcomment %}
-        
-                
-        {% endif %}
+           {% endif %}
+        </div>  
+     
         
     </div>
     {% endfor %}
-
+  
 </div>
 </div>
 

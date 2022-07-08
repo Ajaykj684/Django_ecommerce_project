@@ -3,7 +3,15 @@
 
 {% block content %}
 <div class="d-flex justify-content-center"><h2>Sales Report</h2></div>
+<div class="input-group m-2 mb-5 mx-5" style="width:28%;">
+  <form class="input-group" action="{% url 'sales_report' %}" method="POST">
+  {% csrf_token %}
+  <input type="number" name="salesreport_search" style="background:white" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+  <button type="submit"  class="btn btn-outline-primary">search</button>
 
+  </form>
+</div>
+<div>
 <form method="POST" action = "{% url 'show_result'  %}">
   {% csrf_token %}
 From :&nbsp<input type='date' name="fromdate"/>&nbsp &nbsp &nbsp
@@ -96,4 +104,33 @@ To :&nbsp<input type='date' name="todate"/>
   </table>
 
 </form>
+
+  
+{% if salesreport.has_other_pages %}
+<nav aria-label="Page navigation example"></nav>
+<ul class="pagination">
+  {% if salesreport.has_previous %}
+    <li class="page-item" ><a class="page-link" href="?page={{ salesreport.previous_page_number }}">&laquo;</a></li>
+  {% else %}
+    <li class="page-link disabled"> <span aria-hidden="true">&laquo;</span></li>
+  {% endif %}
+  {% for i in salesreport.paginator.page_range %}
+    {% if salesreport.number == i %}
+      <li class=" page-item page-link active"><span> {{ i }}</span> <span class=" page-linksr-only"></span></li>
+    {% else %}
+      <li class="page-item" ><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if salesreport.has_next %}
+    <li class="page-item" ><a class="page-link" href="?page={{salesreport.next_page_number }}" >&raquo;</a></li>
+  {% else %}
+    <li class="page-item m-2 disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+</nav>
+
+{% endif %}
+
+</div>
+
 {% endblock %}

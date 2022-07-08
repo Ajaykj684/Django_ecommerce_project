@@ -41,21 +41,21 @@
 				<div class="col-md-4">
 					<div class="banner_item align-items-center" style="background-image:url({% static 'images/banner_1.jpg'%})">
 						<div class="banner_category">
-							<a href="categories.html">women's</a>
+							<a >women's</a>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="banner_item align-items-center" style="background-image:url({% static 'images/banner_2.jpg'%})">
 						<div class="banner_category">
-							<a href="categories.html">Kid's</a>
+							<a >Kid's</a>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="banner_item align-items-center" style="background-image:url({% static 'images/banner_3.jpg'%})">
 						<div class="banner_category">
-							<a href="categories.html">men's</a>
+							<a >men's</a>
 						</div>
 					</div>
 				</div>
@@ -65,25 +65,24 @@
 
 	<!-- New Arrivals -->
 
-	<div class="new_arrivals " style="background:">
+	<div class="new_arrivals ">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 text-center ">
+			<div class="row d-flex justify-content-center">
+				<div class="col-lg-3 col-md-12 text-center ">
 					<div class="section_title new_arrivals_title">
 						<h2>New Arrivals</h2>
 					</div>
 				</div>
 			</div>
 			<div class="row align-items-center">
-				<div class="col text-center">
-					<div class="new_arrivals_sorting">
-						<ul class="arrivals_grid_sorting clearfix button-group filters-button-group">
+				<div class="col text-center ">
+					<div class="new_arrivals_sorting ">
+						<ul class="arrivals_grid_sorting clearfix button-group filters-button-group d-flex justify-content-center">
 							<li class="grid_sorting_button butto1n d-flex flex-column justify-content-center align-items-center active is-checked" data-filter="*">all</li>
 							<li class="grid_sorting_button butto1n d-flex flex-column justify-content-center align-items-center" data-filter=".men">men's</li>
 							<li class="grid_sorting_button butto1n d-flex flex-column justify-content-center align-items-center" data-filter=".women">women's</li>
 							<li class="grid_sorting_button butto1n d-flex flex-column justify-content-center align-items-center" data-filter=".kid">Kid's</li>
 						
-						<button class="btn-danger mx-5 mt-2" style="width:80px"><a href="{% url 'store' %}" style="color:white;">view all</a></button></div>
 					    
 					</div>
 				</div>
@@ -92,13 +91,13 @@
 		</div>
 		<div class="container">
 			<div class="row" >
-				<div class="col">
+				<div class="col ">
 					<div class="product-grid d-flex mt-5 " data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
 
 						<!-- Product -->
 						{% for product in products %}
 
-						<div class="  product-item men col-md-6 col-sm-12p mb-4 pb-4">
+						<div class="  product-item men  col-12 col-sm-12 col-md-6 col-lg-4 mb-4 pb-4 mt-3">
 							
 							<div class="product discount product_filter">
 							<a href="{% url 'add_wishlist' product.id %}"><i class='far fa-heart m-3 text-muted' style='font-size:20px; color:red'></i></a>
@@ -107,16 +106,10 @@
 								
 								<div class="product_image  d-flex justify-content-center">
 
-									{% comment %} <label for="id-of-input" class="custom-checkbox">
-									  <input type="checkbox" id="id-of-input"/>
-									  <a href="{% url 'wishlist' %}">
-									  <i class="glyphicon glyphicon-heart-empty"></i>
-									  <i class="glyphicon glyphicon-heart"></i></a>
-									 
-									</label> {% endcomment %}
+					
 
 									<a href="{{product.get_url}}">
-									<img class=""src="{{ product.image1.url }}" style="height:200px;"></a>
+									<img class=""src="{{ product.image1.url }}" style="height:200px; width:100%;"></a>
 								</div>
 								{% if product.offer_perc > 0 %}
 								   {% if product.product_offer > 0  and product.offer_perc|add:product.product_offer < 100 and product.offer_perc|add:product.product_offer > 0 %}
@@ -139,15 +132,16 @@
 								</div>
 							</div>
 							
-							<div class="asd d-flex justify-content-center mb-5" >
+							<div class="asd d-flex justify-content-center " >
+								{% if request.user.is_authenticated %}
 
-							<div class="red_button add_to_cart_button" >
+							<div class="red_button add_to_cart_button " >
 									{% if product.offer_price > 0 %}
-								<a href="{% url 'add_cart' product.id %}">ADD TO CART &nbsp <i class="fa fa-shopping-cart" style="font-size:14px" aria-hidden="true"></i>
+								<a href="{% url 'add_cart' product.id %}" class="mb-5">ADD TO CART &nbsp <i class="fa fa-shopping-cart" style="font-size:14px" aria-hidden="true"></i>
 								</a>
 							</div>
 							<div class="red_button add_to_cart_button mx-1 ml-1" style="background: rgb(7, 110, 42);">
-							<a href="{% url 'buy_now' product.id %}">BUY NOW &nbsp<i class='fa fa-shopping-bag' style="font-size:14px"></i>
+							<a href="{% url 'buy_now' product.id %}" class="mb-5">BUY NOW &nbsp<i class='fa fa-shopping-bag' style="font-size:14px"></i>
 								</a> </div>
 								{% else %}
 								<a href="#">Not Available</a> </div>
@@ -155,6 +149,21 @@
 								{% endif %}
 								
 							</div>
+							{% else %}
+
+							<div class="red_button add_to_cart_button " >
+								{% if product.offer_price > 0 %}
+							<a href="{% url 'add_cart' product.id %}" class="mb-5">ADD TO CART &nbsp <i class="fa fa-shopping-cart" style="font-size:14px" aria-hidden="true"></i>
+							</a>
+						</div>
+							{% else %}
+							<a href="#">Not Available</a> </div>
+
+							{% endif %}
+							
+						</div>
+
+							{% endif %}
 							
 						</div>
 						{% endfor %}
@@ -198,7 +207,7 @@
 								<div class="timer_unit">Sec</div>
 							</li>
 						</ul>
-						<div class="red_button deal_ofthe_week_button"><a href="#">shop now</a></div>
+						<div class="red_button deal_ofthe_week_button" ><a href="{% url 'store' %}">shop now</a></div>
 					</div>
 				</div>
 			</div>
@@ -266,7 +275,7 @@
 						<div class="blog_background" style="background-image:url({% static 'images/blog_1.jpg'%})"></div>
 						<div class="blog_content d-flex flex-column align-items-center justify-content-center text-center">
 							<h4 class="blog_title">Here are the trends I see coming this fall</h4>
-							<span class="blog_meta">by admin | dec 01, 2017</span>
+							<span class="blog_meta">by Bestbuy | jun 01, 2022</span>
 							<a class="blog_more" href="#">Read more</a>
 						</div>
 					</div>
@@ -276,7 +285,7 @@
 						<div class="blog_background" style="background-image:url({% static 'images/blog_2.jpg'%})"></div>
 						<div class="blog_content d-flex flex-column align-items-center justify-content-center text-center">
 							<h4 class="blog_title">Here are the trends I see coming this fall</h4>
-							<span class="blog_meta">by admin | dec 01, 2017</span>
+							<span class="blog_meta">by Bestbuy | jun 01, 2022</span>
 							<a class="blog_more" href="#">Read more</a>
 						</div>
 					</div>
@@ -286,7 +295,7 @@
 						<div class="blog_background" style="background-image:url({% static 'images/blog_3.jpg'%})"></div>
 						<div class="blog_content d-flex flex-column align-items-center justify-content-center text-center">
 							<h4 class="blog_title">Here are the trends I see coming this fall</h4>
-							<span class="blog_meta">by admin | dec 01, 2017</span>
+							<span class="blog_meta">by Bestbuy | jun 01, 2022</span>
 							<a class="blog_more" href="#">Read more</a>
 						</div>
 					</div>
@@ -307,9 +316,9 @@
 					</div>
 				</div>
 				<div class="col-lg-6">
-					<form action="#" >
+					<form  >
 						<div class="newsletter_form d-flex flex-md-row flex-column flex-xs-column align-items-center justify-content-lg-end justify-content-center">
-							<input id="newsletter_email" type="email" placeholder="Your email" required="required" data-error="Valid email is required.">
+							<input id="newsletter_email" type="email" placeholder="Your email"  data-error="Valid email is required.">
 							<button id="newsletter_submit" type="submit" class="newsletter_submit_btn trans_300 btn-danger" style="width:130px; height:40px;" value="Submit">subscribe</button>
 						</div>
 					</form>

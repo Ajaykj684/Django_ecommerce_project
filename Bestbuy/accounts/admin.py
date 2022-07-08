@@ -3,11 +3,6 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Account, Wallet
 from .models import Profile
 
-
-
-
-
-
 # Register your models here.
 
 class AccountAdmin(UserAdmin):

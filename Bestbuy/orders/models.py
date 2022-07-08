@@ -25,16 +25,18 @@ class Payment(models.Model):
 
 class Order(models.Model):
     payment_mode = [ 
-
+        
+        ('WALLET','WALLET'),
         ('COD','COD'),
         ('PAYPAL','PAYPAL'),
         ('RAZOR_PAY','RAZORPAY')
     ]
     STATUS = (
 
-        ('New','New'),
-        ('Accepted','Accepted'),
-        ('Completed','Completed'),
+        ('Confirmed','Confirmed'),
+        ('Shipped','Shipped'),
+        ('Out_for_delivery','Out_for_delivery'),
+        ('Delivered','Delivered'),
         ('Cancelled','Cancelled'),
         ('Returned','Returned')
     )
@@ -53,14 +55,13 @@ class Order(models.Model):
     zip = models.CharField(max_length=10 ,  blank=True, null=True)
     order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField(blank=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='New')
-    # coupon_applied = models.BooleanField( default= False )
-    # coupon = models.CharField( blank=True , max_length=30)
-
+    status = models.CharField(max_length=30, choices=STATUS, default='Confirmed')
+    
     ip = models.CharField(max_length=20,blank=True)
     is_ordered = models.BooleanField(default=False)
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 
     def __str__(self):

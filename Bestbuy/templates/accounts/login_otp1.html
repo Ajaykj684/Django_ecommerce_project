@@ -34,7 +34,7 @@
                                     <!-- otp enter form -->
                                     
                                   
-                                    <form class="row contact_form" action="{% url 'login_otp1' %}" method="POST">
+                                    <form class="row contact_form" action="{% url 'login_otp1' Phone_number %}" method="POST">
                                         {% csrf_token %}
                                         <div class="col-md-12 form-group p_star">
                                             <input type="Text" class="form-control"  name="otp" value=""

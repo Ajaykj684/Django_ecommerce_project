@@ -6,19 +6,333 @@
 {% load crispy_forms_tags %}
 <script defer src="https://cdn.crop.guide/loader/l.js?c=STFGTL"></script>
 
+{% load static%}
 
-<div class="container " style="margin-bottom:50px;">
-<div class="d-flex justify-content-end">
-  <a href="{% url 'product_list' %}" style="width:150px;"> <button type="button" class="btn btn-primary btn-block " style="width:100%;" >Back</button></a>
-   </div>
-<form action="{% url 'product_add'%}" method="POST" class="col-lg-6 uniForm" style="padding:2rem;margin:auto; " enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="form-control row " style="padding:1rem;background-color:#F3F6F9;" width='2rem'>
-    {{form|crispy}}
-    <div class="abcd" style="height:120px;"></div>
-  </div>
-  <button class='btn_1' style="margin-left:87%; margin-top:1rem;" type="submit" >Add</button>
-</form>
-</div>
+<style>
+    .image_preview{
+        width: 100px;
+        min-height: 100px;
+        border: 2px solid #dddddd;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color:#cccccc
+
+    }
+    .image_preview2{
+        width: 100px;
+        min-height: 100px;
+        border: 2px solid #dddddd;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color:#cccccc
+
+    }
+    .image_preview3{
+        width: 100px;
+        min-height: 100px;
+        border: 2px solid #dddddd;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color:#cccccc
+
+    }
+    
+    /* The snackbar - position it at the bottom and in the middle of the screen */
+    #snackbar {
+      visibility: hidden; /* Hidden by default. Visible on click */
+      min-width: 250px; /* Set a default minimum width */
+      margin-left: -125px; /* Divide value of min-width by 2 */
+      background-color: #333; /* Black background color */
+      color: #fff; /* White text color */
+      text-align: center; /* Centered text */
+      border-radius: 2px; /* Rounded borders */
+      padding: 16px; /* Padding */
+      position: fixed; /* Sit on top of the screen */
+      z-index: 1; /* Add a z-index if needed */
+      left: 50%; /* Center the snackbar */
+      bottom: 30px; /* 30px from the bottom */
+    }
+    
+    /* Show the snackbar when clicking on a button (class added with JavaScript) */
+    #snackbar.show {
+      visibility: visible; /* Show the snackbar */
+      /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+      However, delay the fade out process for 2.5 seconds */
+      -webkit-animation: fadein 0.5s, fadeout 0.10s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    
+    /* Animations to fade the snackbar in and out */
+    @-webkit-keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+    }
+    
+    @keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+    }
+    
+    @-webkit-keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
+    }
+    
+    @keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
+    }
+
+
+</style>
+{% comment %} <center>
+{% for msg in messages %}
+
+<div style="color:red;">{{msg}}</div>
+
+
+
+{% endfor %}
+</center> {% endcomment %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  
+          <script>
+            {% for msg in messages %}
+            
+            swal('{{ msg }}', 'please try again', 'error');
+            {% endfor %}
+        </script>
+
+
+            <!-- Table Start -->
+     <div class="container-fluid pt-4 px-4 j">
+             
+      
+             <center> <div class="col-md-12 col-xl-8">
+                        <div class="bg-light rounded h-100 p-4">
+               
+
+                            <div  style="display: flex; justify-content: space-between;">
+                
+                            <form  action="{% url 'product_add' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                
+                            <div class=" mb-3">
+                                <input type="text" name="product_name" class="form-control" 
+                                    placeholder="Product Name">  
+                            </div>
+
+
+                            <div class=" mb-3">
+                                <input type="number" name="price" class="form-control" 
+                                    placeholder="Price">  
+                            </div>
+
+                            <div class=" mb-3">
+                                <input type="number" name="stock" class="form-control" 
+                                    placeholder="Stock">  
+                            </div>
+
+                
+                            <div class="">  
+                                <textarea class="form-control" name="description" placeholder="Description"
+                                   style="height: 150px;"></textarea>
+                               
+                            </div>
+
+                            
+                            <div class="mb-3 mt-3" style="display: flex; justify-content: left;">
+                                <label class="mx-2" >Category:</label>
+                                <select name="category" class="filter-selectbox">
+                                <option value="" selected>---------</option>
+                                {% for cat in cate %}
+                              <option value="{{cat.id}}">{{cat.category_name}}</option>
+                              
+                              {% endfor %}
+                            </select> 
+                            
+                        </div> 
+
+<!-----------------------IMAGESSS SELECTOR---------------------------------------->
+                        <div class="d-flex justify-content-left " style="display: flex;">
+
+                        <div class="mb-3 mx-2 pt-3" style="display: flex; justify-content: left;">
+                            <input type="file" class="form-control " required name="image"  id="imageInp">
+                            
+                          
+                        </div>
+                        <div class="mb-3 pt-3 mx-2" style="display: flex; justify-content: left; ">
+                            <input type="file" class="form-control" required style="position: static;"  name="image2"  id="imageInp2">
+                        </div>
+                        
+                        <div class="mb-3 pt-3" style="display: flex; justify-content: left;">
+                            <input type="file" class="form-control" required  name="image3"  id="imageInp3">
+                        </div>
+                    </div>
+                        
+<!-----------------------IMAGESSS SELECTOR END---------------------------------------->
+
+
+<!----------------------- PREVIEW BEGIN---------------------------------------->
+                        
+                        <div class="d-flex justify-content-left" style="display: flex;">
+                        
+
+                        
+                        <div  class="image-preview  mx-2" id="imagePreview"  > 
+                                <img  src="" alt="Image Preview" class="image_preview"> 
+                                <span class="image-preview__default-text"></span>
+                             </div>
+
+                        <div  class="image-preview2  mx-2" id="imagePreview2"  > 
+                                <img  src="" alt="Image Preview" class="image_preview2"> 
+                                <span class="image-preview2__default-text"></span>
+                             </div>
+
+                        <div  class="image-preview3  mx-2" id="imagePreview3"  > 
+                                <img  src="" alt="Image Preview" class="image_preview3"> 
+                                <span class="image-preview3__default-text"></span>
+                             </div>
+                            
+                        </div>
+
+                            <button class="btn btn-primary my-4" type="submit">Submit</button>
+
+                           
+                            </form>
+                        </div>
+                    </div></center>
+
+
+
+                </div>
+
+            </div>
+     </div>
+
+     <script>
+
+      function myFunction() {
+          // Get the snackbar DIV
+          var x = document.getElementById("snackbar");
+        
+          // Add the "show" class to DIV
+          x.className = "show";
+        
+          // After 3 seconds, remove the show class from DIV
+          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+  </script>
+  
+
+
+
+
+
+<script>
+    const imageInp =document.getElementById("imageInp");
+    const previewContainer = document.getElementById("imagePreview");
+    const previewImage  = previewContainer.querySelector(".image_preview");
+    const previewDefaulttext  = previewContainer.querySelector(".image-preview__default-text");
+
+    imageInp.addEventListener("change", function(){
+        const file = this.files[0];
+        
+        if (file){
+            const reader  = new FileReader();
+
+            previewDefaulttext.style.display = "none";
+            previewImage.style.display      = "block";
+
+            reader.addEventListener("load", function(){
+                console.log(this);
+                previewImage.setAttribute("src", this.result);
+            });
+
+            reader.readAsDataURL(file);
+        }   else{
+            previewDefaulttext.style.display = "null";
+            previewImage.style.display      = "null";
+        }
+    });
+
+</script>
+
+
+
+
+<script>
+    const imageInp2 =document.getElementById("imageInp2");
+    const previewContainer2 = document.getElementById("imagePreview2");
+    const previewImage2  = previewContainer2.querySelector(".image_preview2");
+    const previewDefaulttext2  = previewContainer2.querySelector(".image-preview2__default-text");
+
+    imageInp2.addEventListener("change", function(){
+        const file = this.files[0];
+        
+        if (file){
+            const reader  = new FileReader();
+
+            previewDefaulttext2.style.display = "none";
+            previewImage2.style.display      = "block";
+
+            reader.addEventListener("load", function(){
+                console.log(this)
+                previewImage2.setAttribute("src", this.result);
+            });
+
+            reader.readAsDataURL(file);
+        }   else{
+            previewDefaulttext2.style.display = "null";
+            previewImage2.style.display      = "null";
+        }
+    });
+
+</script>
+
+<script>
+    const imageInp3 =document.getElementById("imageInp3");
+    const previewContainer3 = document.getElementById("imagePreview3");
+    const previewImage3  = previewContainer3.querySelector(".image_preview3");
+    const previewDefaulttext3  = previewContainer3.querySelector(".image-preview3__default-text");
+
+    imageInp3.addEventListener("change", function(){
+        const file = this.files[0]
+        
+        if (file){
+            const reader  = new FileReader();
+
+            previewDefaulttext3.style.display = "none";
+            previewImage3.style.display      = "block";
+
+            reader.addEventListener("load", function(){
+                console.log(this)
+                previewImage3.setAttribute("src", this.result);
+            });
+
+            reader.readAsDataURL(file);
+        }   else{
+            previewDefaulttext3.style.display = "null";
+            previewImage3.style.display      = "null";
+        }
+    });
+
+</script>
+
+
+
+
+
 {% endblock%}
 

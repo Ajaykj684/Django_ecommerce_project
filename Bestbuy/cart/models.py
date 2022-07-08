@@ -33,6 +33,7 @@ class CartItem(models.Model):
     quantity = models.IntegerField()
     is_active = models.BooleanField(default=True)
     size = models.CharField(max_length=10, choices=size, default='M', null = True )
+    total = models.IntegerField(default=0, null = True )
 
     
 

@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-g1b%e86rswtcx19q5qipxja)k(x=mu6qd15p$*79c!d2#-n_w&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -47,6 +51,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'orders',
     'wishlist',
+    'vonage',
     
 ]
 
@@ -90,16 +95,10 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME'  : 'mydatabase',
-         'USER'  : 'postgres',
-         'PASSWORD' : '12345',
-         'HOST' : 'localhost',
-         'PORT' : '5432',
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -139,6 +138,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [ 
     os.path.join('static')
 ]
+STATIC_ROOT  = os.path.join(BASE_DIR, 'bestbuyproject/staticfiles')
 
 #media files
 MEDIA_URL = '/media/'
@@ -150,5 +150,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-RAZORPAY_KEY_ID = 'rzp_test_8cWmlnkYHYznrK'
-RAZORPAY_KEY_SECRET = '7hOFVJSDn4Po1wyGPARzH9o6'
+RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET')
+ACCOUNT_SECURITY_API_KEY = config('ACCOUNT_SECURITY_API_KEY')
+
+
+
+#twilio
+
+ACCOUNT_SID = config('ACCOUNT_SID')
+AUTH_TOKEN = config('AUTH_TOKEN')
+SERVICES = config('SERVICES')
